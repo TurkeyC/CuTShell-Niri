@@ -1,18 +1,12 @@
 pragma Singleton
 
 import qs.config
-import Caelestia.Services
 import Quickshell
 
 Singleton {
     id: root
 
-    readonly property alias provider: provider
-    readonly property alias values: provider.values
+    readonly property var values: []
 
-    CavaProvider {
-        id: provider
-
-        bars: Config.services.visualiserBars
-    }
+    readonly property var provider: null
 }

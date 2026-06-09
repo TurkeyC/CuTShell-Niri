@@ -33,7 +33,7 @@ Item {
                         }));
                     count++;
                 }
-                if (!occupied[ws + 1])
+                if (!occupied[ws + 1] && count > 0)
                     pills[count - 1].end = ws;
             }
         }

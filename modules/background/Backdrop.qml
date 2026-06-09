@@ -53,16 +53,21 @@ Variants {
             return source;
         }
 
+        // Rectangle {
+        //     anchors.fill: parent
+        //     color: "black"
+        // }
+        // 原本的 Backdrop.qml 中改为：
         Rectangle {
             anchors.fill: parent
-            color: "black"
+            color: "transparent"
         }
 
-        Rectangle {
-            anchors.fill: parent
-            color: Colours.palette.m3background
-            opacity: Colours.transparency.enabled ? 0.8 : 1
-        }
+        // Rectangle {
+        //     anchors.fill: parent
+        //     color: Colours.palette.m3background
+        //     opacity: Colours.transparency.enabled ? 0.8 : 1
+        // }
 
         Image {
             id: bgImage
