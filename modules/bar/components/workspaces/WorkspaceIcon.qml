@@ -12,11 +12,13 @@ Item {
     required property var workspace
     property bool popupActive: (Niri.wsContextAnchor === root) || (Niri.wsContextAnchor === workspace) || (Niri.wsContextType === "workspaces")
 
-    Layout.alignment: Qt.AlignLeft | Qt.AlignTop
-    Layout.preferredHeight: Config.bar.sizes.innerWidth - Appearance.padding.xs * 2
+    Layout.alignment: Qt.AlignTop | Qt.AlignLeft
+    Layout.preferredWidth: Config.bar.sizes.innerHeight - Appearance.padding.xs * 2
+    Layout.preferredHeight: Config.bar.sizes.innerHeight - Appearance.padding.xs * 2
 
-    implicitWidth: Config.bar.sizes.innerWidth - Appearance.padding.xs * 2 + (popupActive ? Config.bar.workspaces.windowContextWidth : 0)
-    Behavior on implicitWidth {
+    implicitHeight: Config.bar.sizes.innerHeight - Appearance.padding.xs * 2 + (popupActive ? Config.bar.workspaces.windowContextWidth : 0)
+    implicitWidth: Config.bar.sizes.innerHeight - Appearance.padding.xs * 2
+    Behavior on implicitHeight {
         Anim {
             easing.bezierCurve: Appearance.anim.curves.emphasized
         }
@@ -24,15 +26,15 @@ Item {
 
     z: popupActive ? 90 : 0
 
-    RowLayout {
+    ColumnLayout {
         id: content
-        anchors.left: parent.left
+        anchors.top: parent.top
         spacing: Appearance.padding.xs
 
         Item {
-            Layout.alignment: Qt.AlignVCenter
-            Layout.preferredWidth: Config.bar.sizes.innerWidth - Appearance.padding.xs * 2
-            Layout.preferredHeight: Config.bar.sizes.innerWidth - Appearance.padding.xs * 2
+            Layout.alignment: Qt.AlignHCenter
+            Layout.preferredHeight: Config.bar.sizes.innerHeight - Appearance.padding.xs * 2
+            Layout.preferredWidth: Config.bar.sizes.innerHeight - Appearance.padding.xs * 2
 
             StyledText {
                 id: indicator
@@ -42,8 +44,6 @@ Item {
 
                 animate: true
                 text: {
-                    //TODO: Add config option to choose between name/number/both for workspaces
-
                     const wsName = Niri.getWorkspaceNameByIndex(root.workspace.index) || (root.workspace.ws);
                     const label = Config.bar.workspaces.label || root.workspace.ws;
                     const occupiedLabel = Config.bar.workspaces.occupiedLabel || label;
@@ -59,13 +59,9 @@ Item {
         }
 
         Loader {
-            // anchors.verticalCenter: parent.verticalCenter
-            // anchors.left: parent.right
-            // anchors.leftMargin: Appearance.padding.xl
             active: root.popupActive
             sourceComponent: StyledText {
                 color: Config.bar.workspaces.occupiedBg || root.workspace.isOccupied || root.workspace.activeWsId === root.workspace.ws ? Colours.palette.m3onSurface : Colours.layer(Colours.palette.m3outlineVariant, 2)
-
                 font.family: Appearance.font.family.mono
                 text: Niri.getWorkspaceNameByIndex(root.workspace.index) || "Workspace " + (root.workspace.index + 1)
             }
@@ -77,9 +73,6 @@ Item {
         id: interactionArea
     }
 
-    // --------------------------
-    // Interaction / Drag Handling
-    // --------------------------
     component Interaction: StateLayer {
         id: mouseArea
         anchors.fill: root

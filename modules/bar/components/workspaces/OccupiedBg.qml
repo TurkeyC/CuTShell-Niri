@@ -63,17 +63,17 @@ Item {
 
             anchors {
                 // horizontalCenter: root.horizontalCenter
-                left: root.left
-                right: root.right
-                rightMargin: isContextActiveInWs ? -Config.bar.workspaces.windowContextWidth + Appearance.padding.xs : 0
+                top: root.top
+                bottom: root.bottom
+                bottomMargin: isContextActiveInWs ? -Config.bar.workspaces.windowContextWidth + Appearance.padding.xs : 0
             }
 
             topRightRadius: isContextActiveInWs ? Appearance.rounding.normal : radius
             bottomRightRadius: isContextActiveInWs ? Appearance.rounding.normal : radius
 
-            y: (start?.y ?? 0)
+            x: (start?.x ?? 0)
             // implicitWidth: Config.bar.sizes.innerWidth - Appearance.padding.xs * 2 + 2
-            implicitHeight: start && end ? end.y + end.size - start.y : 0
+            implicitWidth: start && end ? end.x + end.size - start.x : 0
             // implicitHeight: end?.y + end?.height - start?.y
 
             color: Colours.layer(Colours.palette.m3surfaceContainerHigh, 2)
@@ -107,11 +107,11 @@ Item {
                 }
             }
 
-            Behavior on y {
+            Behavior on x {
                 Anim {}
             }
 
-            Behavior on implicitHeight {
+            Behavior on implicitWidth {
                 Anim {}
             }
         }

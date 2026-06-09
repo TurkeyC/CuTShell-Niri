@@ -28,7 +28,7 @@ Rectangle {
 
     color: "transparent"
 
-    anchors.left: parent.left
+    anchors.top: parent.top
 
     required property string displayTitle
     required property string displaySubtitle

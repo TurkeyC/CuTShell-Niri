@@ -19,8 +19,8 @@ StyledRect {
 
     readonly property int focusedWindowId: Niri.focusedWindow?.id ?? -1
 
-    implicitHeight: layout.implicitHeight + Appearance.padding.xs * 2
-    implicitWidth: Config.bar.sizes.innerWidth
+    implicitWidth: layout.implicitWidth + Appearance.padding.xs * 2
+    implicitHeight: Config.bar.sizes.innerHeight
 
     color: Colours.tPalette.m3surfaceContainer
     radius: Appearance.rounding.full
@@ -39,67 +39,38 @@ StyledRect {
     Loader {
         active: Config.bar.workspaces.occupiedBg
         asynchronous: true
-
         anchors.fill: parent
         anchors.margins: Appearance.padding.xs
-
         sourceComponent: OccupiedBg {
             workspaces: workspaces
-            occupied: {
-                let merged = Object.assign({}, root.occupied);
-                merged[root.activeWsId] = true;
-                return merged;
-            }
+            occupied: Object.assign({}, root.occupied, {[root.activeWsId]: true})
             groupOffset: root.groupOffset
         }
     }
 
     Loader {
-        // Right click on window context menu
-        active: Config.bar.workspaces.windowRighClickContext && Niri.wsContextType !== "none"
+        active: Config.bar.workspaces.windowRighClickContext && Niri.wsContextType === "workspaces"
         asynchronous: true
-
-        anchors.left: parent.left
-        anchors.leftMargin: Appearance.padding.xs
-
+        anchors.top: parent.top
+        anchors.topMargin: Appearance.padding.xs
         z: Niri.wsContextType === "workspaces" ? -10 : 0
-
         sourceComponent: ContextBg {
             groupOffset: root.groupOffset
-            wsOffset: root.y
+            wsOffset: root.x
             anchorWs: Niri.wsContextAnchor
         }
     }
 
-    //TODO, For Niri, workspace context menu on right click.
-    // Loader {
-    //     active: Config.bar.workspaces.windowRighClickContext && Niri.wsContextType !== "none"
-    //     asynchronous: true
-    //     z: Niri.wsContextType === "item" ? 10 : 1
-
-    //     anchors.right: parent.right
-    //     anchors.rightMargin: -Appearance.padding.xs
-
-    //     sourceComponent: ContextIndicator {
-    //         groupOffset: root.groupOffset
-    //         wsOffset: root.y
-    //         anchorWs: Niri.wsContextAnchor
-    //     }
-    // }
-
-    ColumnLayout {
+    RowLayout {
         id: layout
-
         z: 0
-
-        anchors.left: parent.left
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.leftMargin: Appearance.padding.xs
+        anchors.top: parent.top
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.topMargin: Appearance.padding.xs
         spacing: Math.floor(Appearance.spacing.sm / 2)
 
         Repeater {
             id: workspaces
-
             model: Config.bar.workspaces.shown
 
             Workspace {
@@ -114,28 +85,14 @@ StyledRect {
 
     Loader {
         z: 1
-        anchors.left: parent.left
-        anchors.right: parent.right
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
         active: Config.bar.workspaces.activeIndicator
         asynchronous: true
-
         sourceComponent: ActiveIndicator {
             activeWsId: root.activeWsId
             workspaces: workspaces
             mask: layout
-            groupOffset: root.groupOffset
-        }
-    }
-
-    Loader {
-        id: pager
-        active: Config.bar.workspaces.pagerActive
-
-        anchors.top: parent.bottom
-        anchors.horizontalCenter: parent.horizontalCenter
-        z: -1
-
-        sourceComponent: Pager {
             groupOffset: root.groupOffset
         }
     }

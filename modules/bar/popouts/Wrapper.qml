@@ -13,8 +13,8 @@ Item {
 
     required property ShellScreen screen
 
-    readonly property real nonAnimWidth: x > 0 || hasCurrent ? children.find(c => c.shouldBeActive)?.implicitWidth ?? content.implicitWidth : 0
-    readonly property real nonAnimHeight: children.find(c => c.shouldBeActive)?.implicitHeight ?? content.implicitHeight
+    readonly property real nonAnimWidth: children.find(c => c.shouldBeActive)?.implicitWidth ?? content.implicitWidth
+    readonly property real nonAnimHeight: hasCurrent ? children.find(c => c.shouldBeActive)?.implicitHeight ?? content.implicitHeight : 0
 
     property string currentName
     property real currentCenter
@@ -86,8 +86,8 @@ Item {
 
         shouldBeActive: root.hasCurrent && !root.detachedMode
         asynchronous: true
-        anchors.right: parent.right
-        anchors.verticalCenter: parent.verticalCenter
+        anchors.top: parent.top
+        anchors.horizontalCenter: parent.horizontalCenter
 
         sourceComponent: Content {
             wrapper: root
@@ -120,7 +120,7 @@ Item {
     }
 
     Behavior on animY {
-        enabled: root.implicitWidth > 0
+        enabled: root.implicitHeight > 0
 
         Anim {
             duration: root.animLength
@@ -133,15 +133,15 @@ Item {
         y: root.animY - root.y
     }
 
-    Behavior on implicitWidth {
+    Behavior on implicitHeight {
         Anim {
             duration: root.animLength
             easing.bezierCurve: root.animCurve
         }
     }
 
-    Behavior on implicitHeight {
-        enabled: root.implicitWidth > 0
+    Behavior on implicitWidth {
+        enabled: root.implicitHeight > 0
 
         Anim {
             duration: root.animLength

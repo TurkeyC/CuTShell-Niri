@@ -27,9 +27,9 @@ StyledRect {
     property int cWs
     property int lastWs
 
-    // Geometry tracking
-    property real leading: workspaces.itemAt(currentWsIdx)?.y ?? 0
-    property real trailing: workspaces.itemAt(currentWsIdx)?.y ?? 0
+    // Geometry tracking - horizontal layout: track X position
+    property real leading: workspaces.itemAt(currentWsIdx)?.x ?? 0
+    property real trailing: workspaces.itemAt(currentWsIdx)?.x ?? 0
 
     property real currentSize: workspaces.itemAt(currentWsIdx)?.size ?? 0
     property real offset: Math.min(leading, trailing)
@@ -38,23 +38,23 @@ StyledRect {
         const s = Math.abs(leading - trailing) + currentSize;
         if (Config.bar.workspaces.activeTrail && lastWs > currentWsIdx) {
             const ws = workspaces.itemAt(lastWs);
-            return ws ? Math.min(ws.y + ws.size - offset, s) : 0;
+            return ws ? Math.min(ws.x + ws.size - offset, s) : 0;
         }
         return s;
     }
 
     clip: true
-    y: offset + mask.y
-    implicitWidth: Config.bar.sizes.innerWidth - Appearance.padding.xs * 2
-    implicitHeight: size
+    x: offset + mask.x
+    implicitHeight: Config.bar.sizes.innerHeight - Appearance.padding.xs * 2
+    implicitWidth: size
     radius: Appearance.rounding.full
     color: Colours.palette.m3primary
 
     anchors {
-        left: parent.left
-        right: parent.right
-        leftMargin: Appearance.padding.xs
-        rightMargin: Appearance.padding.xs
+        top: parent.top
+        bottom: parent.bottom
+        topMargin: Appearance.padding.xs
+        bottomMargin: Appearance.padding.xs
     }
 
     Colouriser {
@@ -62,8 +62,8 @@ StyledRect {
         sourceColor: Colours.palette.m3onSurface
         colorizationColor: Colours.palette.m3onPrimary
 
-        x: 0
-        y: -root.offset
+        x: -root.offset
+        y: 0
         implicitWidth: root.mask.implicitWidth
         implicitHeight: root.mask.implicitHeight
     }

@@ -20,16 +20,16 @@ StyledRect {
     radius: Appearance.rounding.full
 
     clip: true
-    implicitWidth: Config.bar.sizes.innerWidth
-    implicitHeight: iconColumn.implicitHeight + Appearance.padding.md * 2 - (Config.bar.status.showLockStatus && !Niri.capsLock && !Niri.numLock ? iconColumn.spacing : 0)
+    implicitHeight: Config.bar.sizes.innerHeight
+    implicitWidth: iconColumn.implicitWidth + Appearance.padding.md * 2 - (Config.bar.status.showLockStatus && !Niri.capsLock && !Niri.numLock ? iconColumn.spacing : 0)
 
-    ColumnLayout {
+    RowLayout {
         id: iconColumn
 
-        anchors.left: parent.left
-        anchors.right: parent.right
+        anchors.top: parent.top
         anchors.bottom: parent.bottom
-        anchors.bottomMargin: Appearance.padding.md
+        anchors.left: parent.left
+        anchors.leftMargin: Appearance.padding.md
 
         spacing: Appearance.spacing.md / 2
 
@@ -38,12 +38,12 @@ StyledRect {
             name: "lockstatus"
             active: Config.bar.status.showLockStatus
 
-            sourceComponent: ColumnLayout {
+            sourceComponent: RowLayout {
                 spacing: 0
 
                 Item {
-                    implicitWidth: capslockIcon.implicitWidth
-                    implicitHeight: Niri.capsLock ? capslockIcon.implicitHeight : 0
+                    implicitWidth: Niri.capsLock ? capslockIcon.implicitWidth : 0
+                    implicitHeight: capslockIcon.implicitHeight
 
                     MaterialIcon {
                         id: capslockIcon
@@ -65,16 +65,16 @@ StyledRect {
                         }
                     }
 
-                    Behavior on implicitHeight {
+                    Behavior on implicitWidth {
                         Anim {}
                     }
                 }
 
                 Item {
-                    Layout.topMargin: Niri.capsLock && Niri.numLock ? iconColumn.spacing : 0
+                    Layout.leftMargin: Niri.capsLock && Niri.numLock ? iconColumn.spacing : 0
 
-                    implicitWidth: numlockIcon.implicitWidth
-                    implicitHeight: Niri.numLock ? numlockIcon.implicitHeight : 0
+                    implicitWidth: Niri.numLock ? numlockIcon.implicitWidth : 0
+                    implicitHeight: numlockIcon.implicitHeight
 
                     MaterialIcon {
                         id: numlockIcon
@@ -96,7 +96,7 @@ StyledRect {
                         }
                     }
 
-                    Behavior on implicitHeight {
+                    Behavior on implicitWidth {
                         Anim {}
                     }
                 }
@@ -154,12 +154,12 @@ StyledRect {
 
         // Bluetooth section
         WrappedLoader {
-            Layout.preferredHeight: implicitHeight
+            Layout.preferredWidth: implicitWidth
 
             name: "bluetooth"
             active: Config.bar.status.showBluetooth
 
-            sourceComponent: ColumnLayout {
+            sourceComponent: RowLayout {
                 spacing: Appearance.spacing.md / 2
 
                 // Bluetooth icon
@@ -213,7 +213,7 @@ StyledRect {
                 }
             }
 
-            Behavior on Layout.preferredHeight {
+            Behavior on Layout.preferredWidth {
                 Anim {}
             }
         }
@@ -252,7 +252,7 @@ StyledRect {
     component WrappedLoader: Loader {
         required property string name
 
-        Layout.alignment: Qt.AlignHCenter
+        Layout.alignment: Qt.AlignVCenter
         asynchronous: true
         visible: active
     }

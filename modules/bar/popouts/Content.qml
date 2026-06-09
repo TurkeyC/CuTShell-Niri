@@ -27,9 +27,9 @@ Item {
 
         Popout {
             name: "wsWindow"
-            sourceComponent:
-            // Bind y to currentCenter for dynamic following
-            WsContextPopout {}
+            sourceComponent: WsContextPopout {}
+            // Offset the inner content padding so the popup sits flush against the bar
+            anchors.topMargin: -Appearance.padding.xl
         }
 
         Popout {
@@ -130,8 +130,8 @@ Item {
         required property string name
         property bool shouldBeActive: root.wrapper.currentName === name
 
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.right: parent.right
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.top: parent.top
 
         asynchronous: true
         opacity: 0

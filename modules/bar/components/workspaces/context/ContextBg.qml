@@ -29,151 +29,89 @@ Item {
 
     property color bgColor: isWorkspaces ? Colours.palette.m3surfaceContainer : ((isFocused) ? Qt.alpha(Colours.palette.m3primary, 0.95) : (hasWindows ? Colours.palette.m3surfaceContainerHigh : "transparent"))
 
-    // --- Highlight Rect ---
+    // --- Highlight Rect (horizontal layout: extends downward) ---
     component HighlightRect: Rectangle {
         id: hrect
-
         color: root.bgColor
 
-        width: root.activated && Niri.wsContextAnchor ? Config.bar.workspaces.windowContextWidth + Config.bar.workspaces.windowIconSize : Config.bar.workspaces.windowIconSize
-        height: (root.anchorWs?.height ?? 0) + root.gPadding * 2
+        height: root.activated && Niri.wsContextAnchor ? Config.bar.workspaces.windowContextWidth + Config.bar.workspaces.windowIconSize : Config.bar.workspaces.windowIconSize
+        width: (root.anchorWs?.width ?? 0) + root.gPadding * 2
 
-        x: 0
-        y: root.anchorWs?.mapToItem(root, 0, 0).y - root.gPadding ?? 0
+        y: 0
+        x: root.anchorWs?.mapToItem(root, 0, 0).x - root.gPadding ?? 0
 
         radius: root.rounding
-        topRightRadius: Appearance.rounding.normal
-        bottomRightRadius: Appearance.rounding.normal
+        bottomLeftRadius: 0
+        bottomRightRadius: 0
 
-        Behavior on color {
-            CAnim {
-                easing.bezierCurve: Appearance.anim.curves.emphasized
-            }
-        }
-
-        Behavior on radius {
-            Anim {
-                easing.bezierCurve: Appearance.anim.curves.emphasized
-            }
-        }
-        Behavior on topRightRadius {
-            Anim {
-                easing.bezierCurve: Appearance.anim.curves.emphasized
-            }
-        }
-        Behavior on bottomRightRadius {
-            Anim {
-                easing.bezierCurve: Appearance.anim.curves.emphasized
-            }
-        }
-
-        Behavior on width {
-            Anim {
-                easing.bezierCurve: Appearance.anim.curves.emphasized
-            }
-        }
-        Behavior on height {
-            Anim {
-                easing.bezierCurve: Appearance.anim.curves.emphasized
-            }
-        }
-        Behavior on opacity {
-            Anim {
-                easing.bezierCurve: Appearance.anim.curves.emphasized
-            }
-        }
-
-        Behavior on x {
-            Anim {
-                easing.bezierCurve: Appearance.anim.curves.emphasized
-            }
-        }
-        Behavior on y {
-            Anim {
-                easing.bezierCurve: Appearance.anim.curves.emphasized
-            }
-        }
+        Behavior on color { CAnim { easing.bezierCurve: Appearance.anim.curves.emphasized } }
+        Behavior on radius { Anim { easing.bezierCurve: Appearance.anim.curves.emphasized } }
+        Behavior on bottomLeftRadius { Anim { easing.bezierCurve: Appearance.anim.curves.emphasized } }
+        Behavior on bottomRightRadius { Anim { easing.bezierCurve: Appearance.anim.curves.emphasized } }
+        Behavior on width { Anim { easing.bezierCurve: Appearance.anim.curves.emphasized } }
+        Behavior on height { Anim { easing.bezierCurve: Appearance.anim.curves.emphasized } }
+        Behavior on opacity { Anim { easing.bezierCurve: Appearance.anim.curves.emphasized } }
+        Behavior on x { Anim { easing.bezierCurve: Appearance.anim.curves.emphasized } }
+        Behavior on y { Anim { easing.bezierCurve: Appearance.anim.curves.emphasized } }
     }
 
     HighlightRect {
         id: highlightLow
         color: !root.isWorkspaces ? Colours.palette.m3surfaceContainer : "transparent"
-
         anchors.fill: highlight
-
         anchors.margins: -Appearance.padding.xs
-
-        anchors.leftMargin: Config.bar.workspaces.windowIconSize
+        anchors.topMargin: Config.bar.workspaces.windowIconSize
         topLeftRadius: 0
-        bottomLeftRadius: 0
+        topRightRadius: 0
 
         Corner {
             property bool firstWorkspace: (root.isWorkspace && root.anchorWs.index === 0)
-            cornerType: 2
-
-            height: !(Niri.wsContextAnchor || root.activated) || (firstWorkspace) ? 0 : root.cornerPieceSize
+            cornerType: 3
+            width: !(Niri.wsContextAnchor || root.activated) || (firstWorkspace) ? 0 : root.cornerPieceSize
         }
         Corner {
             property bool lastWindowNWorkspace: (root.isItem && ((root.anchorWs.curWindowIndex === root.anchorWs.wsWindowCount - 1) && (root.anchorWs.workspace.index === Config.bar.workspaces.shown - 1)))
             property bool lastWorkspace: (root.isWorkspace && root.anchorWs.index === Config.bar.workspaces.shown - 1)
-
-            cornerType: 0
-            height: !(Niri.wsContextAnchor || root.activated) || (lastWorkspace || (lastWindowNWorkspace)) ? 0 : root.cornerPieceSize
+            cornerType: 1
+            width: !(Niri.wsContextAnchor || root.activated) || (lastWorkspace || (lastWindowNWorkspace)) ? 0 : root.cornerPieceSize
         }
     }
 
     HighlightRect {
         id: highlight
-
-        topRightRadius: Appearance.rounding.small
+        bottomLeftRadius: Appearance.rounding.small
         bottomRightRadius: Appearance.rounding.small
 
         Corner {
-            cornerType: 2
-            anchors.leftMargin: Config.bar.workspaces.windowIconSize - 1
-            height: !(Niri.wsContextAnchor || root.activated) || root.isWorkspace ? 0 : root.cornerPieceSize
+            cornerType: 3
+            anchors.topMargin: Config.bar.workspaces.windowIconSize - 1
+            width: !(Niri.wsContextAnchor || root.activated) || root.isWorkspace ? 0 : root.cornerPieceSize
         }
         Corner {
             property bool lastWindow: (root.isItem && (root.anchorWs.curWindowIndex === root.anchorWs.wsWindowCount - 1))
-
-            cornerType: 0
-            anchors.leftMargin: Config.bar.workspaces.windowIconSize - 1
-            height: !(Niri.wsContextAnchor || root.activated) || (root.isWorkspace || lastWindow) ? 0 : root.cornerPieceSize
+            cornerType: 1
+            anchors.topMargin: Config.bar.workspaces.windowIconSize - 1
+            width: !(Niri.wsContextAnchor || root.activated) || (root.isWorkspace || lastWindow) ? 0 : root.cornerPieceSize
         }
     }
 
-    // --- Optional corner piece (if needed later) ---
     component Corner: CornerPiece {
-        property int cornerType: 0 // 1 = bottom, 3 = top
-        width: root.activated && !root.isWorkspaces && Niri.wsContextAnchor ? root.cornerPieceSize : 0
-        height: root.cornerPieceSize
+        property int cornerType: 0
+        height: root.activated && !root.isWorkspaces && Niri.wsContextAnchor ? root.cornerPieceSize : 0
+        width: root.cornerPieceSize
         radius: Appearance.padding.xl * 1.3
         orientation: cornerType
         color: parent.color
 
-        anchors.left: parent.left
-        anchors.leftMargin: Appearance.padding.xs
-        anchors.top: cornerType === 0 ? parent.bottom : undefined
-        anchors.bottom: cornerType === 2 ? parent.top : undefined
-        anchors.topMargin: cornerType === 0 ? -1 : undefined
-        anchors.bottomMargin: cornerType === 2 ? -1 : undefined
+        anchors.top: parent.top
+        anchors.topMargin: Appearance.padding.xs
+        anchors.left: cornerType === 3 ? parent.right : undefined
+        anchors.right: cornerType === 1 ? parent.left : undefined
+        anchors.leftMargin: cornerType === 3 ? -1 : undefined
+        anchors.rightMargin: cornerType === 1 ? -1 : undefined
 
-        Behavior on height {
-            Anim {
-                easing.bezierCurve: Appearance.anim.curves.emphasized
-            }
-        }
-
-        Behavior on width {
-            Anim {
-                easing.bezierCurve: Appearance.anim.curves.emphasized
-            }
-        }
-
-        Behavior on anchors.leftMargin {
-            Anim {
-                easing.bezierCurve: Appearance.anim.curves.emphasized
-            }
-        }
+        Behavior on height { Anim { easing.bezierCurve: Appearance.anim.curves.emphasized } }
+        Behavior on width { Anim { easing.bezierCurve: Appearance.anim.curves.emphasized } }
+        Behavior on anchors.topMargin { Anim { easing.bezierCurve: Appearance.anim.curves.emphasized } }
     }
 }

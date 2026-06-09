@@ -2,6 +2,7 @@ pragma ComponentBehavior: Bound
 
 import qs.services
 import qs.config
+import "../components/workspaces/context" as WsContext
 import QtQuick
 
 Item {
@@ -20,4 +21,13 @@ Item {
 
     implicitHeight: anchorWs ? ((itemH + Appearance.padding.xs) * anchorWsCount) : itemH - Appearance.padding.md
     implicitWidth: root.expandedW
+
+    // Render context content when anchor is the clicked WindowIcon ("item" type)
+    Loader {
+        active: Niri.wsContextType === "item" && root.anchorWs
+        asynchronous: true
+        sourceComponent: WsContext.WindowIconContext {
+            iconObj: root.anchorWs
+        }
+    }
 }

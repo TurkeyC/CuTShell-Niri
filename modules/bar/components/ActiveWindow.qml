@@ -5,6 +5,7 @@ import qs.services
 import qs.utils
 import qs.config
 import QtQuick
+import QtQuick.Layouts
 
 Item {
     id: root
@@ -37,115 +38,59 @@ Item {
         return sorted.indexOf(focusedX) + 1;
     }
 
-    readonly property int maxHeight: {
-        const otherModules = bar.children.filter(c => c.id && c.item !== this && c.id !== "spacer");
-        const otherHeight = otherModules.reduce((acc, curr) => acc + curr.height, 0);
-        // Length - 2 cause repeater counts as a child
-        return bar.height - otherHeight - bar.spacing * (bar.children.length - 1) - bar.vPadding * 2;
-    }
-    property Title current: text1
-
     readonly property string windowTitle: Niri.focusedWindowTitle ?? qsTr("Desktop")
 
     function getCompactName() {
         if (!root.windowTitle || root.windowTitle === qsTr("Desktop"))
             return qsTr("Desktop");
-        // " - " (standard hyphen), " — " (em dash), " – " (en dash)
-        const parts = root.windowTitle.split(/\s+[\-\u2013\u2014]\s+/);
+        const parts = root.windowTitle.split(/\s+[\-–—]\s+/);
         if (parts.length > 1)
             return parts[parts.length - 1].trim();
         return root.windowTitle;
     }
 
-
-
-
     clip: true
-    implicitWidth: Math.max(icon.implicitWidth, current.implicitHeight, colIndicator.implicitWidth)
-    implicitHeight: icon.implicitHeight + current.implicitWidth + current.anchors.topMargin + (colIndicator.visible ? colIndicator.implicitHeight + Appearance.spacing.xs : 0)
+    implicitHeight: Config.bar.sizes.innerHeight
+    implicitWidth: layout.implicitWidth
 
-    MaterialIcon {
-        id: icon
+    RowLayout {
+        id: layout
+        anchors.fill: parent
+        spacing: Appearance.spacing.sm
 
-        anchors.horizontalCenter: parent.horizontalCenter
-
-        animate: true
-        text: Icons.getAppCategoryIcon(Niri.focusedWindowClass, "desktop_windows")
-        color: root.colour
-    }
-
-    StyledText {
-        id: colIndicator
-
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.bottom: parent.bottom
-
-        visible: root.columnCount > 1
-        text: `${root.focusedColumn}/${root.columnCount}`
-        color: Colours.palette.m3onSurfaceVariant
-        font.pointSize: Appearance.font.size.labelSmall
-        font.family: Appearance.font.family.mono
-    }
-
-    Title {
-        id: text1
-    }
-
-    Title {
-        id: text2
-    }
-
-    TextMetrics {
-        id: metrics
-
-        text: Config.bar.activeWindow.compact ? root.getCompactName() : root.windowTitle //Niri.focusedWindowTitle ?? qsTr("Desktop")
-        font.pointSize: Appearance.font.size.bodySmall
-        font.family: Appearance.font.family.mono
-        elide: Qt.ElideRight
-        elideWidth: root.maxHeight - icon.height
-
-        onTextChanged: {
-            const next = root.current === text1 ? text2 : text1;
-            next.text = elidedText;
-            root.current = next;
+        MaterialIcon {
+            id: icon
+            animate: true
+            text: Icons.getAppCategoryIcon(Niri.focusedWindowClass, "desktop_windows")
+            color: root.colour
         }
-        onElideWidthChanged: root.current.text = elidedText
+
+        StyledText {
+            id: titleText
+            Layout.fillWidth: true
+            clip: true
+
+            verticalAlignment: Text.AlignVCenter
+            text: Config.bar.activeWindow.compact ? root.getCompactName() : root.windowTitle
+            font.pointSize: Appearance.font.size.bodySmall
+            font.family: Appearance.font.family.mono
+            color: root.colour
+        }
+
+        StyledText {
+            id: colIndicator
+
+            visible: root.columnCount > 1
+            text: `${root.focusedColumn}/${root.columnCount}`
+            color: Colours.palette.m3onSurfaceVariant
+            font.pointSize: Appearance.font.size.labelSmall
+            font.family: Appearance.font.family.mono
+        }
     }
 
-    Behavior on implicitHeight {
+    Behavior on implicitWidth {
         Anim {
             easing.bezierCurve: Appearance.anim.curves.emphasized
-        }
-    }
-
-    component Title: StyledText {
-        id: text
-
-        anchors.horizontalCenter: icon.horizontalCenter
-        anchors.top: icon.bottom
-        anchors.topMargin: Appearance.spacing.sm
-
-        font.pointSize: metrics.font.pointSize
-        font.family: metrics.font.family
-        color: root.colour
-        opacity: root.current === this ? 1 : 0
-
-        transform: [
-            Translate {
-                x: Config.bar.activeWindow.inverted ? -implicitWidth + text.implicitHeight : 0
-            },
-            Rotation {
-                angle: Config.bar.activeWindow.inverted ? 270 : 90
-                origin.x: text.implicitHeight / 2
-                origin.y: text.implicitHeight / 2
-            }
-        ]
-
-        width: implicitHeight
-        height: implicitWidth
-
-        Behavior on opacity {
-            Anim {}
         }
     }
 }

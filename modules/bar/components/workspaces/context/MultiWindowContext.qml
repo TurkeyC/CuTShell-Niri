@@ -24,7 +24,11 @@ Rectangle {
 
     Component.onCompleted: activated = true
 
-    radius: root.baseRadius
+    radius: 0
+    topLeftRadius: 0
+    topRightRadius: 0
+    bottomLeftRadius: root.baseRadius
+    bottomRightRadius: root.baseRadius
     color: (Colours.palette.m3surfaceContainerLow)
 
     border.width: root.hPadding
@@ -40,9 +44,9 @@ Rectangle {
 
     clip: true
 
-    anchors.left: parent.left
-    anchors.leftMargin: root.sideMargin
-    anchors.verticalCenter: parent.verticalCenter
+    anchors.top: parent.top
+    anchors.topMargin: 0
+    anchors.horizontalCenter: parent.horizontalCenter
 
     Behavior on implicitWidth {
         Anim {

@@ -38,25 +38,27 @@ Item {
     signal dragUpdate(var iconItem, real mouseY, real mouseX)
     signal dragEnd(var iconItem)
 
-    anchors.left: parent.left
+    anchors.top: parent.top
 
-    implicitWidth: iconLoader.implicitWidth + (popupActive ? Config.bar.workspaces.windowContextWidth : 0)
-    implicitHeight: iconLoader.implicitHeight
+    implicitWidth: iconLoader.implicitWidth
+    implicitHeight: iconLoader.implicitHeight + (popupActive ? Config.bar.workspaces.windowContextWidth : 0)
 
     z: popupActive ? 90 : 0
 
-    Behavior on implicitWidth {
+    Behavior on implicitHeight {
         Anim {
             easing.bezierCurve: Appearance.anim.curves.emphasized
         }
     }
 
+    // Inline context is now rendered inside WsContextPopout (popout system)
+    // to prevent duplicate menus. Keep this loader disabled.
     Loader {
         id: contextLoader
-        anchors.left: parent.left
-        anchors.leftMargin: iconLoader.implicitWidth + Appearance.padding.xs
-        anchors.verticalCenter: parent.verticalCenter
-        active: (Niri.wsContextType !== "none" && Config.bar.workspaces.windowRighClickContext)
+        anchors.top: parent.top
+        anchors.topMargin: iconLoader.implicitHeight + Appearance.padding.xs
+        anchors.horizontalCenter: parent.horizontalCenter
+        active: false
         sourceComponent: WindowIconContext {
             iconObj: iconItem
         }
@@ -65,10 +67,8 @@ Item {
     Loader {
         id: iconLoader
 
-        // anchors.centerIn: parent
-        anchors.left: parent.left
+        anchors.top: parent.top
 
-        // anchors.horizontalCenter: parent.horizontalCenter
         sourceComponent: iconItem.useImageIcon ? imageIconComp : materialIconComp
         property var windowData: iconItem.windowData
         property var windowCount: iconItem.windowCount
@@ -222,16 +222,8 @@ Item {
                 } else if (iconItem.windowData?.id) {
                     Niri.focusWindow(iconItem.windowData.id);
                 }
-            } else if (mouse.button === Qt.RightButton) {
-                if (!(Niri.wsContextAnchor === iconItem)) {
-                    Niri.wsContextAnchor = iconItem;
-                    Niri.wsContextType = "item";
-                } else {
-                    Niri.wsContextAnchor = iconItem.workspace;
-                    Niri.wsContextType = "workspace";
-                }
-                iconItem.requestPopup(iconItem.groupWindowData, iconItem);
             }
+            // 右击窗口图标弹窗已停用
         }
     }
 

@@ -29,8 +29,8 @@ Item {
     property bool activated: false
     Component.onCompleted: activated = true
 
-    anchors.left: parent.left
-    anchors.verticalCenter: parent.verticalCenter
+    anchors.top: parent.top
+    anchors.horizontalCenter: parent.horizontalCenter
     // opacity: popupActive && activated ? 1 : 0
 
     // height: popupActive && activated && (Niri.wsContextAnchor) ? contextLoader.height : parent.height
