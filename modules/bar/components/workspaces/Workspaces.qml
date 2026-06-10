@@ -15,7 +15,8 @@ StyledRect {
 
     readonly property int activeWsId: Niri.focusedWorkspaceIndex + 1
     readonly property var occupied: Niri.workspaceHasWindows
-    readonly property int groupOffset: Math.floor((Niri.focusedWorkspaceIndex) / Config.bar.workspaces.shown) * Config.bar.workspaces.shown
+    readonly property int dynamicWsCount: Math.min(Niri.currentOutputWorkspaces.length + 1, 10)
+    readonly property int groupOffset: 0  // 动态显示全部 workspace，无分页
 
     readonly property int focusedWindowId: Niri.focusedWindow?.id ?? -1
 
@@ -58,6 +59,7 @@ StyledRect {
             groupOffset: root.groupOffset
             wsOffset: root.x
             anchorWs: Niri.wsContextAnchor
+            wsCount: workspaces.count
         }
     }
 
@@ -71,7 +73,7 @@ StyledRect {
 
         Repeater {
             id: workspaces
-            model: Config.bar.workspaces.shown
+            model: Math.max(1, root.dynamicWsCount)
 
             Workspace {
                 activeWsId: root.activeWsId

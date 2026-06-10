@@ -12,6 +12,7 @@ Item {
     required property int groupOffset
     required property int wsOffset
     required property Item anchorWs
+    required property int wsCount
 
     // --- Helpers ---
     readonly property bool isItem: Niri.wsContextType === "item"
@@ -70,8 +71,8 @@ Item {
             width: !(Niri.wsContextAnchor || root.activated) || (firstWorkspace) ? 0 : root.cornerPieceSize
         }
         Corner {
-            property bool lastWindowNWorkspace: (root.isItem && ((root.anchorWs.curWindowIndex === root.anchorWs.wsWindowCount - 1) && (root.anchorWs.workspace.index === Config.bar.workspaces.shown - 1)))
-            property bool lastWorkspace: (root.isWorkspace && root.anchorWs.index === Config.bar.workspaces.shown - 1)
+            property bool lastWindowNWorkspace: (root.isItem && ((root.anchorWs.curWindowIndex === root.anchorWs.wsWindowCount - 1) && (root.anchorWs.workspace.index === root.wsCount - 1)))
+            property bool lastWorkspace: (root.isWorkspace && root.anchorWs.index === root.wsCount - 1)
             cornerType: 1
             width: !(Niri.wsContextAnchor || root.activated) || (lastWorkspace || (lastWindowNWorkspace)) ? 0 : root.cornerPieceSize
         }

@@ -12,56 +12,64 @@ ShapePath {
     readonly property real rounding: wrapper.isDetached ? Appearance.rounding.normal : Config.border.rounding
     readonly property bool flatten: wrapper.width < rounding * 2
     readonly property real roundingX: flatten ? wrapper.width / 2 : rounding
-    property real ibr: invertBottomRounding ? -1 : 1
+    property real ibr: invertBottomRounding ? 1 : -1  // 默认内收(dashboard风格)，invertBottomRounding时外扩
     property real sideRounding: startX > 0 ? -1 : 1
 
     strokeWidth: -1
     fillColor: Colours.palette.m3surface
 
-    // Horizontal bar (bar at top, popup opens downward):
-    // Top edge = flat against bar (no corner arcs).
-    // Bottom corners = outward (normal) or inward (inverted, when reaching screen bottom).
+    // Dashboard 风格弹窗：顶部外扩圆角、底部内收圆角
+    // 起点从 (roundingX, 0) 开始，为顶部左侧外扩圆角留空间
 
-    // 1. Top edge: flat, straight right
-    PathLine {
-        relativeX: root.wrapper.width
-        relativeY: 0
+    // 0. 起点：从 (roundingX, 0) 开始
+    PathMove { x: root.roundingX; y: 0 }
+
+    // 1. 顶部直线：right
+    PathLine { relativeX: root.wrapper.width - root.roundingX * 2; relativeY: 0 }
+
+    // 2. 顶部右角：外扩，顺时针
+    PathArc {
+        relativeX: root.roundingX
+        relativeY: root.rounding
+        radiusX: root.roundingX
+        radiusY: root.rounding
+        direction: PathArc.Clockwise
     }
 
-    // 2. Right edge: down to just above bottom-right corner
-    PathLine {
-        relativeX: 0
-        relativeY: root.wrapper.height - root.rounding
-    }
+    // 3. 右侧直线：down
+    PathLine { relativeX: 0; relativeY: root.wrapper.height - root.rounding * 2 }
 
-    // 3. Bottom-right corner: outward (ibr=1) or inward (ibr=-1)
+    // 4. 底部右角：默认内收 (ibr=-1, CCW)，invertBottomRounding 时外扩 (ibr=1, CW)
     PathArc {
         relativeX: -root.roundingX
         relativeY: root.rounding * root.ibr
-        radiusX: Math.min(root.rounding, root.wrapper.width)
+        radiusX: root.roundingX
         radiusY: root.rounding
         direction: root.ibr < 0 ? PathArc.Counterclockwise : PathArc.Clockwise
     }
 
-    // 4. Bottom edge: leftwards
-    PathLine {
-        relativeX: -(root.wrapper.width - root.roundingX * 2)
-        relativeY: 0
-    }
+    // 5. 底部直线：left
+    PathLine { relativeX: -(root.wrapper.width - root.roundingX * 2); relativeY: 0 }
 
-    // 5. Bottom-left corner: outward (ibr=1) or inward (ibr=-1)
+    // 6. 底部左角：默认内收 (ibr=-1, CCW)，invertBottomRounding 时外扩 (ibr=1, CW)
     PathArc {
         relativeX: -root.roundingX
         relativeY: -root.rounding * root.ibr
-        radiusX: Math.min(root.rounding, root.wrapper.width)
+        radiusX: root.roundingX
         radiusY: root.rounding
         direction: root.ibr < 0 ? PathArc.Counterclockwise : PathArc.Clockwise
     }
 
-    // 6. Left edge: up back to origin (auto-closes via implicit line to start)
-    PathLine {
-        relativeX: 0
-        relativeY: -(root.wrapper.height - root.rounding)
+    // 7. 左侧直线：up
+    PathLine { relativeX: 0; relativeY: -(root.wrapper.height - root.rounding * 2) }
+
+    // 8. 顶部左角：外扩，顺时针
+    PathArc {
+        relativeX: root.roundingX
+        relativeY: -root.rounding
+        radiusX: root.roundingX
+        radiusY: root.rounding
+        direction: PathArc.Clockwise
     }
 
     Behavior on fillColor {

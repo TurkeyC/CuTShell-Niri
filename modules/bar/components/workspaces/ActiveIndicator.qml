@@ -13,11 +13,12 @@ StyledRect {
     required property Item mask
     required property int groupOffset
 
+    readonly property int wsCount: workspaces.count
     readonly property int currentWsIdx: {
         let i = activeWsId - 1;
         while (i < 0)
-            i += Config.bar.workspaces.shown;
-        return i % Config.bar.workspaces.shown;
+            i += wsCount;
+        return i % wsCount;
     }
     onCurrentWsIdxChanged: {
         lastWs = cWs;

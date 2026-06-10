@@ -43,12 +43,18 @@ Item {
                 height: parent.height
 
                 animate: true
+                font.family: Appearance.font.family.mono
                 text: {
-                    const wsName = Niri.getWorkspaceNameByIndex(root.workspace.index) || (root.workspace.ws);
+                    const wsName = Niri.getWorkspaceNameByIndex(root.workspace.index);
+                    // workspace 有自定义名称时直接显示
+                    if (wsName && wsName !== "") {
+                        return wsName;
+                    }
                     const label = Config.bar.workspaces.label || root.workspace.ws;
                     const occupiedLabel = Config.bar.workspaces.occupiedLabel || label;
                     const activeLabel = Config.bar.workspaces.activeLabel || (root.workspace.isOccupied ? occupiedLabel : label);
-                    return root.workspace.activeWsId === root.workspace.ws ? activeLabel : root.workspace.isOccupied ? occupiedLabel : label;
+                    return root.workspace.activeWsId === root.workspace.ws ? activeLabel
+                         : root.workspace.isOccupied ? occupiedLabel : label;
                 }
 
                 color: Config.bar.workspaces.occupiedBg || root.workspace.isOccupied || root.workspace.activeWsId === root.workspace.ws ? Colours.palette.m3onSurface : Colours.layer(Colours.palette.m3outlineVariant, 2)

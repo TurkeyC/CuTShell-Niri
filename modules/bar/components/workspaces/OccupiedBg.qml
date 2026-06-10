@@ -21,7 +21,7 @@ Item {
     function buildPills() {
         let count = 0;
         const start = groupOffset;
-        const end = start + Config.bar.workspaces.shown;
+        const end = start + workspaces.count;
         for (const [ws, occ] of Object.entries(occupied)) {
             if (ws > start && ws <= end && occ) {
                 if (!occupied[ws - 1]) {
@@ -57,8 +57,8 @@ Item {
             function getWsIdx(ws: int): int {
                 let i = ws - 1;
                 while (i < 0)
-                    i += Config.bar.workspaces.shown;
-                return i % Config.bar.workspaces.shown;
+                    i += workspaces.count;
+                return i % workspaces.count;
             }
 
             anchors {

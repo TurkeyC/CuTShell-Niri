@@ -162,17 +162,6 @@ CustomMouseArea {
                 visibilities.launcher = false;
         }
 
-        // Show dashboard on hover
-        const showDashboard = Config.dashboard.showOnHover && inTopPanel(panels.dashboard, x, y);
-
-        // Always update visibility based on hover if not in shortcut mode
-        if (!isShortcutActive("dashboard")) {
-            visibilities.dashboard = showDashboard;
-        } else if (showDashboard) {
-            // If hovering over dashboard area while in shortcut mode, transition to hover control
-            clearShortcutPanel("dashboard");
-        }
-
         // Show/hide dashboard on drag (for touchscreen devices)
         if (pressed && inTopPanel(panels.dashboard, dragStart.x, dragStart.y) && withinPanelWidth(panels.dashboard, x, y)) {
             const dragY = y - dragStart.y;
@@ -203,12 +192,36 @@ CustomMouseArea {
             // If hovering over quicktoggles area while in shortcut mode, transition to hover control
             clearShortcutPanel("quicktoggles");
         }
+    }
 
-        // Show popouts on hover
-        if (y < bar.implicitHeight)
-            bar.checkPopout(x);
-        else if (!popouts.currentName.startsWith("traymenu") && popouts.currentName !== "wirelesspassword" && !inLeftPanel(panels.popouts, x, y))
-            popouts.hasCurrent = false;
+    onClicked: event => {
+        if (event.y > bar.implicitHeight) {
+            if (!popouts.currentName.startsWith("traymenu") && popouts.currentName !== "wirelesspassword"
+                && !inLeftPanel(panels.popouts, event.x, event.y)) {
+                popouts.hasCurrent = false;
+            }
+            return;
+        }
+
+        const x = event.x;
+
+        if (event.button === Qt.RightButton) {
+            const barContent = bar.content.item;
+            const ch = barContent?.childAt(x, barContent.height / 2);
+            const id = ch?.id;
+
+            if (id === "tray" || id === "statusIcons") {
+                bar.checkPopout(x);
+            } else {
+                visibilities.dashboard = !visibilities.dashboard;
+            }
+        } else if (event.button === Qt.LeftButton) {
+            const barContent = bar.content.item;
+            const ch = barContent?.childAt(x, barContent.height / 2);
+            if (ch?.id !== "tray") {
+                bar.checkPopout(x);
+            }
+        }
     }
 
     // Monitor individual visibility changes
