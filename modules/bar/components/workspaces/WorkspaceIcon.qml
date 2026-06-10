@@ -44,8 +44,8 @@ Item {
 
                 animate: true
                 text: {
-                    const wsName = Niri.getWorkspaceNameByIndex(root.workspace.index);
-                    return wsName && wsName !== "" ? wsName : root.workspace.ws.toString();
+                    const wsObj = Niri.currentOutputWorkspaces[root.workspace.index];
+                    return wsObj ? (wsObj.name || String(wsObj.idx)) : root.workspace.ws.toString();
                 }
 
                 color: Config.bar.workspaces.occupiedBg || root.workspace.isOccupied || root.workspace.activeWsId === root.workspace.ws ? Colours.palette.m3onSurface : Colours.layer(Colours.palette.m3outlineVariant, 2)
@@ -60,7 +60,10 @@ Item {
             sourceComponent: StyledText {
                 color: Config.bar.workspaces.occupiedBg || root.workspace.isOccupied || root.workspace.activeWsId === root.workspace.ws ? Colours.palette.m3onSurface : Colours.layer(Colours.palette.m3outlineVariant, 2)
                 font.family: Appearance.font.family.mono
-                text: Niri.getWorkspaceNameByIndex(root.workspace.index) || "Workspace " + (root.workspace.index + 1)
+                text: {
+                    const wsObj = Niri.currentOutputWorkspaces[root.workspace.index];
+                    return wsObj ? (wsObj.name || "Workspace " + wsObj.idx) : "Workspace " + (root.workspace.index + 1);
+                }
             }
         }
         z: 1
@@ -83,9 +86,13 @@ Item {
 
         onClicked: mouse => {
             if (mouse.button === Qt.LeftButton) {
-                const wsArrayIndex = root.workspace.index + root.workspace.groupOffset;
-                if (Niri.focusedWorkspaceIndex !== wsArrayIndex)
-                    Niri.switchToWorkspaceByIndex(wsArrayIndex);
+                const wsObj = Niri.currentOutputWorkspaces[root.workspace.index];
+                if (wsObj) {
+                    // Use focusedWorkspaceIndex (reactive property) instead of .is_focused on stale objects
+                    const currentIdx = Niri.allWorkspaces?.[Niri.focusedWorkspaceIndex]?.idx;
+                    if (wsObj.idx !== currentIdx)
+                        Niri.switchToWorkspace(wsObj.idx);
+                }
                 return;
             }
         }

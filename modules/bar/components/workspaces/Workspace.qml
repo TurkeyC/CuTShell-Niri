@@ -18,7 +18,7 @@ ColumnLayout {
 
     readonly property bool isWorkspace: true
     readonly property int size: isWorkspace ? implicitWidth + (hasWindows ? Appearance.padding.xs : 0) : 0
-    readonly property int ws: groupOffset + index + 1
+    readonly property int ws: index + 1
     readonly property bool isOccupied: occupied[ws] ?? false
     readonly property bool hasWindows: isOccupied && Config.bar.workspaces.showWindows
 

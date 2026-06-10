@@ -13,11 +13,21 @@ StyledRect {
 
     // required property ShellScreen screen
 
-    readonly property int activeWsId: Niri.focusedWorkspaceIndex + 1
+    readonly property int activeWsId: {
+        // Use focusedWorkspaceIndex as the reactive trigger
+        const idx = Niri.focusedWorkspaceIndex;
+        const allWs = Niri.allWorkspaces;
+        if (idx >= 0 && allWs && idx < allWs.length) {
+            const ws = allWs[idx];
+            return ws ? ws.idx : 1;
+        }
+        return 1;
+    }
     readonly property var occupied: Niri.workspaceHasWindows
-    readonly property int groupOffset: Math.floor((Niri.focusedWorkspaceIndex) / Config.bar.workspaces.shown) * Config.bar.workspaces.shown
+    // No pagination — show all workspaces on the current output
+    readonly property int groupOffset: 0
 
-    readonly property int dynamicWsCount: Math.min(Niri.currentOutputWorkspaces.length, 10)
+    readonly property int dynamicWsCount: Niri.currentOutputWorkspaces.length
 
     readonly property int focusedWindowId: Niri.focusedWindow?.id ?? -1
 
