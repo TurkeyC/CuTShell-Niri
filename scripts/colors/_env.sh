@@ -3,7 +3,7 @@
 # Source this file at the top of every color script in this directory:
 #   source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/_env.sh"
 
-QUICKSHELL_CONFIG_NAME="niri-caelestia-shell"
+QUICKSHELL_CONFIG_NAME="caelestia"
 : "${XDG_CONFIG_HOME:=$HOME/.config}"
 : "${XDG_CACHE_HOME:=$HOME/.cache}"
 : "${XDG_STATE_HOME:=$HOME/.local/state}"

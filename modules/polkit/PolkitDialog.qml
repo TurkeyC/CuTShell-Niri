@@ -332,11 +332,11 @@ Variants {
 
                         // Cancel button
                         StyledRect {
-                            implicitWidth: cancelText.implicitWidth + Appearance.padding.lg * 2
-                            implicitHeight: cancelText.implicitHeight + Appearance.padding.sm * 2
+                            implicitWidth: cancelText.contentWidth + Appearance.padding.lg * 2
+                            implicitHeight: cancelText.contentHeight + Appearance.padding.sm * 2
 
                             radius: Appearance.rounding.full
-                            color: Colours.layer(Colours.palette.m3surfaceContainerHigh, 1)
+                            color: Colours.palette.m3surfaceContainerHigh
 
                             StateLayer {
                                 radius: Appearance.rounding.full
@@ -359,8 +359,8 @@ Variants {
 
                         // Authenticate button
                         StyledRect {
-                            implicitWidth: authenticateText.implicitWidth + Appearance.padding.lg * 2
-                            implicitHeight: authenticateText.implicitHeight + Appearance.padding.sm * 2
+                            implicitWidth: authenticateText.contentWidth + Appearance.padding.lg * 2
+                            implicitHeight: authenticateText.contentHeight + Appearance.padding.sm * 2
 
                             radius: Appearance.rounding.full
                             color: inputField.text.length > 0 && PolkitService.interactionAvailable

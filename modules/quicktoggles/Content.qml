@@ -181,19 +181,11 @@ Item {
     // Toggle component matching Hyprland's utilities/cards/Toggles style
     component Toggle: IconButton {
         Layout.fillWidth: true
-        Layout.preferredWidth: implicitWidth + (stateLayer.pressed ? Appearance.padding.xl : internalChecked ? Appearance.padding.sm : 0)
         radius: stateLayer.pressed ? Appearance.rounding.small / 2 : internalChecked ? Appearance.rounding.small : Appearance.rounding.normal
-        inactiveColour: Colours.layer(Colours.palette.m3surfaceContainerHighest, 2)
+        inactiveColour: Colours.palette.m3surfaceContainerHighest
         toggle: true
         radiusAnim.duration: Appearance.anim.durations.expressiveFastSpatial
         radiusAnim.easing.bezierCurve: Appearance.anim.curves.expressiveFastSpatial
-
-        Behavior on Layout.preferredWidth {
-            Anim {
-                duration: Appearance.anim.durations.expressiveFastSpatial
-                easing.bezierCurve: Appearance.anim.curves.expressiveFastSpatial
-            }
-        }
     }
 
 }

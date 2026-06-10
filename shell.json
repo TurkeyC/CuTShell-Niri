@@ -4,5 +4,10 @@
     "wallpaperEnabled": false,
     "desktopClock": { "enabled": false },
     "visualiser": { "enabled": false }
+  },
+  "appearance": {
+    "wallpaperTheming": {
+      "enableTerminal": false
+    }
   }
 }
