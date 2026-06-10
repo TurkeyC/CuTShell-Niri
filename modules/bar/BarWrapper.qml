@@ -21,8 +21,8 @@ Item {
 
     property alias content: content
 
-    function checkPopout(x: real): void {
-        content.item?.checkPopout(x);
+    function checkPopout(x, button = Qt.LeftButton): void {
+        content.item?.checkPopout(x, button);
     }
 
     function handleWheel(x: real, angleDelta: point): void {

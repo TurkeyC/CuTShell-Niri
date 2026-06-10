@@ -78,15 +78,20 @@ CustomMouseArea {
         dragStart = Qt.point(event.x, event.y);
         draggingBar = dragStart.y < bar.implicitHeight;
 
-        // 右键在 bar 区域内 → 切换 dashboard（非 tray/statusIcons 区域）
-        if (event.button === Qt.RightButton && event.y < bar.implicitHeight) {
-            const ch = bar.content.item?.childAt(event.x, bar.content.item.height / 2);
-            const id = ch?.id;
+        if (event.y >= bar.implicitHeight)
+            return;
+
+        if (event.button === Qt.RightButton) {
+            // 右键：非 tray/statusIcons/workspaces 区域 → 切换 dashboard
+            const id = bar.content.item?.childAt(event.x, bar.content.item.height / 2)?.id;
             if (id === "tray" || id === "statusIcons") {
-                bar.checkPopout(event.x);
-            } else {
+                bar.checkPopout(event.x, event.button);
+            } else if (id !== "workspaces") {
                 visibilities.dashboard = !visibilities.dashboard;
             }
+        } else if (event.button === Qt.LeftButton) {
+            // 左键：触发弹窗（checkPopout 内部按组件类型处理）
+            bar.checkPopout(event.x, event.button);
         }
     }
 
@@ -95,22 +100,13 @@ CustomMouseArea {
     }
 
     onClicked: event => {
-        if (event.button !== Qt.LeftButton)
+        if (event.button !== Qt.LeftButton || event.y <= bar.implicitHeight)
             return;
 
         // 点击在 bar 外 → 关闭弹窗
-        if (event.y > bar.implicitHeight) {
-            if (!popouts.currentName.startsWith("traymenu") && popouts.currentName !== "wirelesspassword"
-                && !inLeftPanel(panels.popouts, event.x, event.y)) {
-                popouts.hasCurrent = false;
-            }
-            return;
-        }
-
-        // 左键点击 bar 内 → 触发弹窗（tray 除外，tray 由内部处理）
-        const ch = bar.content.item?.childAt(event.x, bar.content.item.height / 2);
-        if (ch?.id !== "tray") {
-            bar.checkPopout(event.x);
+        if (popouts.currentName !== "wirelesspassword"
+            && !inLeftPanel(panels.popouts, event.x, event.y)) {
+            popouts.hasCurrent = false;
         }
     }
 
@@ -131,7 +127,7 @@ CustomMouseArea {
             if (!isShortcutActive("quicktoggles"))
                 visibilities.quicktoggles = false;
 
-            if (!popouts.currentName.startsWith("traymenu") && popouts.currentName !== "wirelesspassword")
+            if (popouts.currentName !== "wirelesspassword")
                 popouts.hasCurrent = false;
 
             if (Config.bar.showOnHover)

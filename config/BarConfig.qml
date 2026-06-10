@@ -31,6 +31,10 @@ JsonObject {
             enabled: true
         },
         {
+            id: "clock",
+            enabled: true
+        },
+        {
             id: "spacer",
             enabled: true
         },
@@ -40,10 +44,6 @@ JsonObject {
         },
         {
             id: "divider",
-            enabled: true
-        },
-        {
-            id: "clock",
             enabled: true
         },
         {

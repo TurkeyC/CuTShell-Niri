@@ -255,5 +255,21 @@ StyledRect {
         Layout.alignment: Qt.AlignVCenter
         asynchronous: true
         visible: active
+
+        // 悬停/点击反馈背景层（不拦截鼠标事件）
+        Rectangle {
+            anchors.fill: parent
+            radius: height / 2
+            color: Qt.alpha(Colours.palette.m3onSurface,
+                hoverArea.containsMouse ? 0.08 : hoverArea.pressed ? 0.12 : 0)
+            Behavior on color { CAnim {} }
+        }
+
+        MouseArea {
+            id: hoverArea
+            anchors.fill: parent
+            hoverEnabled: true
+            acceptedButtons: Qt.NoButton
+        }
     }
 }

@@ -30,7 +30,7 @@ RowLayout {
 
     // Handle Popouts Hover
 
-    function checkPopout(x: real): void {
+    function checkPopout(x, button = Qt.LeftButton): void {
         if (Niri.wsContextType === "workspaces") {
             // Workspace context menu
             const anchor = Niri.wsContextAnchor;
@@ -65,9 +65,16 @@ RowLayout {
             const index = Math.floor(((x - left) / itemWidth) * item.items.count);
             const trayItem = item.items.itemAt(index);
             if (trayItem) {
-                popouts.currentName = `traymenu${index}`;
-                popouts.currentCenter = Qt.binding(() => trayItem.mapToItem(root, trayItem.implicitWidth / 2, 0).x);
-                popouts.hasCurrent = true;
+                if (button === Qt.LeftButton) {
+                    // 左键：快速激活，不弹菜单
+                    trayItem.modelData.activate();
+                } else if (button === Qt.RightButton) {
+                    // 右键：弹出菜单 + secondary activate
+                    popouts.currentName = `traymenu${index}`;
+                    popouts.currentCenter = Qt.binding(() => trayItem.mapToItem(root, trayItem.implicitWidth / 2, 0).x);
+                    popouts.hasCurrent = true;
+                    trayItem.modelData.secondaryActivate();
+                }
             }
         }
     }
