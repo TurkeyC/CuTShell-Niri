@@ -1,0 +1,8 @@
+{
+  "background": {
+    "enabled": true,
+    "wallpaperEnabled": false,
+    "desktopClock": { "enabled": false },
+    "visualiser": { "enabled": false }
+  }
+}

@@ -1,3 +1,4 @@
+import qs.components
 import qs.services
 import qs.config
 import qs.modules.osd as Osd
@@ -77,7 +78,7 @@ Shape {
         wrapper: root.panels.popouts
         invertBottomRounding: wrapper.y + wrapper.height + 1 >= root.height
 
-        startX: wrapper.x
+        startX: wrapper.x - (wrapper.isDetached ? 0 : Config.border.rounding)
         startY: wrapper.y
     }
 

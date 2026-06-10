@@ -10,58 +10,83 @@ ShapePath {
     required property Wrapper wrapper
     required property bool invertBottomRounding
     readonly property real rounding: wrapper.isDetached ? Appearance.rounding.normal : Config.border.rounding
-    readonly property bool flatten: wrapper.width < rounding * 2
-    readonly property real roundingX: flatten ? wrapper.width / 2 : rounding
+    readonly property bool flattenW: wrapper.width < rounding * 2
+    readonly property bool flattenH: wrapper.height < rounding * 2
+    readonly property real capRoundingW: flattenW ? Math.max(1, wrapper.width / 2) : rounding
+    readonly property real capRoundingH: flattenH ? Math.max(1, wrapper.height / 2) : rounding
+    // Widen shape by rounding on each side so the straight edges align with content padding
+    readonly property real shapeWidth: wrapper.width + (wrapper.isDetached ? 0 : rounding * 2)
     property real ibr: invertBottomRounding ? -1 : 1
 
     strokeWidth: -1
     fillColor: Colours.palette.m3surface
 
-    // Horizontal bar (bar at top, popup opens downward):
-    // Top edge = flat against bar (no corner arcs).
-    // Bottom corners = outward (normal) or inward (inverted, when reaching screen bottom).
+    // Shape within wrapper bounds. Path order (counterclockwise):
+    //   Arc(tl) → Line(left) → Arc(bl) → Line(bottom) →
+    //   Arc(br) → Line(right) → Arc(tr) → [implicit close = top edge]
+    //
+    // Top corners: Clockwise = outward convex (always).
+    // Bottom corners: ibr=1 → Counterclockwise = outward,
+    //                 ibr=-1 → Clockwise = inward.
 
-    // 1. Top edge: flat, straight right
+    // 1. Top-left corner: outward convex.
+    //    Arc from (0, 0) curving RIGHT and DOWN into the wrapper.
+    //    Fill to LEFT of the directed edge bulges OUTSIDE (up and left).
+    PathArc {
+        relativeX: root.capRoundingW
+        relativeY: root.capRoundingH
+        radiusX: root.capRoundingW
+        radiusY: root.capRoundingH
+        direction: PathArc.Clockwise
+    }
+
+    // 2. Left edge: down
     PathLine {
-        relativeX: root.wrapper.width
+        relativeX: 0
+        relativeY: root.wrapper.height - root.capRoundingH * 2
+    }
+
+    // 3. Bottom-left corner
+    PathArc {
+        relativeX: root.capRoundingW
+        relativeY: root.capRoundingH
+        radiusX: root.capRoundingW
+        radiusY: root.capRoundingH
+        direction: root.ibr < 0 ? PathArc.Clockwise : PathArc.Counterclockwise
+    }
+
+    // 4. Bottom edge: right (both ibr directions use same endpoint)
+    PathLine {
+        relativeX: Math.max(0, root.shapeWidth - root.capRoundingW * 4)
         relativeY: 0
     }
 
-    // 2. Right edge: down to just above bottom-right corner
+    // 5. Bottom-right corner
+    PathArc {
+        relativeX: root.capRoundingW
+        relativeY: -root.capRoundingH
+        radiusX: root.capRoundingW
+        radiusY: root.capRoundingH
+        direction: root.ibr < 0 ? PathArc.Clockwise : PathArc.Counterclockwise
+    }
+
+    // 6. Right edge: up
     PathLine {
         relativeX: 0
-        relativeY: root.wrapper.height - root.rounding
+        relativeY: -(root.wrapper.height - root.capRoundingH * 2)
     }
 
-    // 3. Bottom-right corner: outward (ibr=1) or inward (ibr=-1)
+    // 7. Top-right corner: outward convex.
+    //    Arc from (W-r, r) curving RIGHT and UP to (W, 0).
     PathArc {
-        relativeX: -root.roundingX
-        relativeY: root.rounding * root.ibr
-        radiusX: Math.min(root.rounding, root.wrapper.width)
-        radiusY: root.rounding
-        direction: root.ibr < 0 ? PathArc.Counterclockwise : PathArc.Clockwise
+        relativeX: root.capRoundingW
+        relativeY: -root.capRoundingH
+        radiusX: root.capRoundingW
+        radiusY: root.capRoundingH
+        direction: PathArc.Clockwise
     }
 
-    // 4. Bottom edge: leftwards
-    PathLine {
-        relativeX: -(root.wrapper.width - root.roundingX * 2)
-        relativeY: 0
-    }
-
-    // 5. Bottom-left corner: outward (ibr=1) or inward (ibr=-1)
-    PathArc {
-        relativeX: -root.roundingX
-        relativeY: -root.rounding * root.ibr
-        radiusX: Math.min(root.rounding, root.wrapper.width)
-        radiusY: root.rounding
-        direction: root.ibr < 0 ? PathArc.Counterclockwise : PathArc.Clockwise
-    }
-
-    // 6. Left edge: up back to origin (auto-closes via implicit line to start)
-    PathLine {
-        relativeX: 0
-        relativeY: -(root.wrapper.height - root.rounding)
-    }
+    // [Implicit close: top edge from (W, 0) left back to (0, 0)]
 
     Behavior on fillColor {
         CAnim {}
