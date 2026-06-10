@@ -32,11 +32,13 @@ Variants {
             WlrLayershell.keyboardFocus: visibilities.launcher || visibilities.session || visibilities.keybinds || visibilities.editingWeatherLocation || visibilities.dashboard || visibilities.manga || visibilities.novel || panels.popouts.isDetached ? WlrKeyboardFocus.Exclusive : WlrKeyboardFocus.None
 
             mask: Region {
-                x: Config.border.thickness
-                y: bar.implicitHeight
-                width: win.width - Config.border.thickness * 2
-                height: win.height - bar.implicitHeight - Config.border.thickness
-                intersection: Intersection.Xor
+                readonly property bool extended: visibilities.session && Config.session.enabled
+
+                x: extended ? 0 : Config.border.thickness
+                y: extended ? 0 : bar.implicitHeight
+                width: extended ? win.width : win.width - Config.border.thickness * 2
+                height: extended ? win.height : win.height - bar.implicitHeight - Config.border.thickness
+                intersection: extended ? Intersection.Combine : Intersection.Xor
 
                 regions: regions.instances
             }
@@ -53,12 +55,14 @@ Variants {
 
                 Region {
                     required property Item modelData
+                    readonly property bool _extd: visibilities.session && Config.session.enabled
 
                     x: modelData.x + Config.border.thickness
                     y: modelData.y + bar.implicitHeight
                     width: modelData.width
                     height: modelData.height
-                    intersection: Intersection.Subtract
+                    // extended 时用 Combine（不剔除面板），normal 时用 Subtract
+                    intersection: _extd ? Intersection.Combine : Intersection.Subtract
                 }
             }
 
@@ -120,6 +124,7 @@ Variants {
                 visibilities: visibilities
                 panels: panels
                 bar: bar
+                clickEffects: clickEffects
 
                 Panels {
                     id: panels
@@ -140,6 +145,10 @@ Variants {
                     popouts: panels.popouts
 
                     Component.onCompleted: Visibilities.bars.set(scope.modelData, this)
+                }
+
+                ClickEffects {
+                    id: clickEffects
                 }
             }
         }

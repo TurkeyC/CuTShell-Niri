@@ -14,6 +14,7 @@ CustomMouseArea {
     required property PersistentProperties visibilities
     required property Panels panels
     required property Item bar
+    required property Item clickEffects
 
     property bool osdHovered
     property point dragStart
@@ -100,8 +101,18 @@ CustomMouseArea {
     }
 
     onClicked: event => {
+        // 触发点击特效（所有左键点击，包括 bar 上）
+        if (event.button === Qt.LeftButton) {
+            clickEffects.spawn(event.x, event.y);
+        }
+
         if (event.button !== Qt.LeftButton || event.y <= bar.implicitHeight)
             return;
+
+        // 点击在 bar 外 → 关闭会话面板（如果在 dim 区域点击）
+        if (visibilities.session && !inRightPanel(panels.session, event.x, event.y)) {
+            visibilities.session = false;
+        }
 
         // 点击在 bar 外 → 关闭弹窗
         if (popouts.currentName !== "wirelesspassword"
@@ -139,6 +150,11 @@ CustomMouseArea {
     onPositionChanged: event => {
         if (popouts.isDetached)
             return;
+
+        // 按住时喂拖尾数据
+        if (root.pressed) {
+            clickEffects.feedTrail(event.x, event.y);
+        }
 
         const x = event.x;
         const y = event.y;

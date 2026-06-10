@@ -26,7 +26,7 @@ mkdir -p "$GENERATED_DIR"
 config_get() {
     local jq_path="$1" default="${2:-true}"
     if [[ -f "$SHELL_CONFIG_FILE" ]] && command -v jq &>/dev/null; then
-        jq -r "${jq_path} // \"${default}\"" "$SHELL_CONFIG_FILE" 2>/dev/null || echo "$default"
+        jq -r "if ${jq_path} == null then \"${default}\" else ${jq_path} end" "$SHELL_CONFIG_FILE" 2>/dev/null || echo "$default"
     else
         echo "$default"
     fi
