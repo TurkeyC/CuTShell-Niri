@@ -72,14 +72,46 @@ CustomMouseArea {
 
     anchors.fill: parent
     hoverEnabled: true
+    acceptedButtons: Qt.LeftButton | Qt.RightButton
 
     onPressed: event => {
         dragStart = Qt.point(event.x, event.y);
         draggingBar = dragStart.y < bar.implicitHeight;
+
+        // 右键在 bar 区域内 → 切换 dashboard（非 tray/statusIcons 区域）
+        if (event.button === Qt.RightButton && event.y < bar.implicitHeight) {
+            const ch = bar.content.item?.childAt(event.x, bar.content.item.height / 2);
+            const id = ch?.id;
+            if (id === "tray" || id === "statusIcons") {
+                bar.checkPopout(event.x);
+            } else {
+                visibilities.dashboard = !visibilities.dashboard;
+            }
+        }
     }
 
     onReleased: event => {
         draggingBar = false;
+    }
+
+    onClicked: event => {
+        if (event.button !== Qt.LeftButton)
+            return;
+
+        // 点击在 bar 外 → 关闭弹窗
+        if (event.y > bar.implicitHeight) {
+            if (!popouts.currentName.startsWith("traymenu") && popouts.currentName !== "wirelesspassword"
+                && !inLeftPanel(panels.popouts, event.x, event.y)) {
+                popouts.hasCurrent = false;
+            }
+            return;
+        }
+
+        // 左键点击 bar 内 → 触发弹窗（tray 除外，tray 由内部处理）
+        const ch = bar.content.item?.childAt(event.x, bar.content.item.height / 2);
+        if (ch?.id !== "tray") {
+            bar.checkPopout(event.x);
+        }
     }
 
     onContainsMouseChanged: {
@@ -192,36 +224,7 @@ CustomMouseArea {
             // If hovering over quicktoggles area while in shortcut mode, transition to hover control
             clearShortcutPanel("quicktoggles");
         }
-    }
 
-    onClicked: event => {
-        if (event.y > bar.implicitHeight) {
-            if (!popouts.currentName.startsWith("traymenu") && popouts.currentName !== "wirelesspassword"
-                && !inLeftPanel(panels.popouts, event.x, event.y)) {
-                popouts.hasCurrent = false;
-            }
-            return;
-        }
-
-        const x = event.x;
-
-        if (event.button === Qt.RightButton) {
-            const barContent = bar.content.item;
-            const ch = barContent?.childAt(x, barContent.height / 2);
-            const id = ch?.id;
-
-            if (id === "tray" || id === "statusIcons") {
-                bar.checkPopout(x);
-            } else {
-                visibilities.dashboard = !visibilities.dashboard;
-            }
-        } else if (event.button === Qt.LeftButton) {
-            const barContent = bar.content.item;
-            const ch = barContent?.childAt(x, barContent.height / 2);
-            if (ch?.id !== "tray") {
-                bar.checkPopout(x);
-            }
-        }
     }
 
     // Monitor individual visibility changes

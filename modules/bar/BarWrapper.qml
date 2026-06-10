@@ -19,6 +19,8 @@ Item {
     readonly property bool shouldBeVisible: Config.bar.persistent || visibilities.bar || isHovered
     property bool isHovered
 
+    property alias content: content
+
     function checkPopout(x: real): void {
         content.item?.checkPopout(x);
     }

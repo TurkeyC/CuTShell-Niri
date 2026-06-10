@@ -12,16 +12,14 @@ ShapePath {
     readonly property real rounding: wrapper.isDetached ? Appearance.rounding.normal : Config.border.rounding
     readonly property bool flatten: wrapper.width < rounding * 2
     readonly property real roundingX: flatten ? wrapper.width / 2 : rounding
-    property real ibr: invertBottomRounding ? 1 : -1  // 默认内收(dashboard风格)，invertBottomRounding时外扩
-    property real sideRounding: startX > 0 ? -1 : 1
+    property real ibr: invertBottomRounding ? 1 : -1
 
     strokeWidth: -1
     fillColor: Colours.palette.m3surface
 
-    // Dashboard 风格弹窗：顶部外扩圆角、底部内收圆角
-    // 起点从 (roundingX, 0) 开始，为顶部左侧外扩圆角留空间
+    // Dashboard 风格弹窗：顶部外扩圆角（贴着 bar 的边向外凸出），底部内收圆角
 
-    // 0. 起点：从 (roundingX, 0) 开始
+    // 0. 起点：从 (roundingX, 0) 开始（为顶部左角留空间）
     PathMove { x: root.roundingX; y: 0 }
 
     // 1. 顶部直线：right
@@ -39,7 +37,7 @@ ShapePath {
     // 3. 右侧直线：down
     PathLine { relativeX: 0; relativeY: root.wrapper.height - root.rounding * 2 }
 
-    // 4. 底部右角：默认内收 (ibr=-1, CCW)，invertBottomRounding 时外扩 (ibr=1, CW)
+    // 4. 底部右角：内收(ibr=-1, CCW) 或 外扩(ibr=1, CW)
     PathArc {
         relativeX: -root.roundingX
         relativeY: root.rounding * root.ibr
@@ -51,7 +49,7 @@ ShapePath {
     // 5. 底部直线：left
     PathLine { relativeX: -(root.wrapper.width - root.roundingX * 2); relativeY: 0 }
 
-    // 6. 底部左角：默认内收 (ibr=-1, CCW)，invertBottomRounding 时外扩 (ibr=1, CW)
+    // 6. 底部左角：内收 或 外扩
     PathArc {
         relativeX: -root.roundingX
         relativeY: -root.rounding * root.ibr
@@ -80,7 +78,4 @@ ShapePath {
         Anim {}
     }
 
-    Behavior on sideRounding {
-        Anim {}
-    }
 }
