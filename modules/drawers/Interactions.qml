@@ -79,18 +79,8 @@ CustomMouseArea {
         dragStart = Qt.point(event.x, event.y);
         draggingBar = dragStart.y < bar.implicitHeight;
 
-        // 按下时关闭面板（无论左右键，只要在 bar 外）
-        var px = event.x;
-        var py = event.y;
-        if (py >= bar.implicitHeight) {
-            if (visibilities.dashboard && !inTopPanel(panels.dashboard, px, py)) {
-                visibilities.dashboard = false;
-            }
-            if (visibilities.launcher && !inBottomPanel(panels.launcher, px, py)) {
-                visibilities.launcher = false;
-            }
+        if (event.y >= bar.implicitHeight)
             return;
-        }
 
         if (event.button === Qt.RightButton) {
             // 右键：非 tray/statusIcons/workspaces 区域 → 切换 dashboard
@@ -119,12 +109,23 @@ CustomMouseArea {
         if (event.button !== Qt.LeftButton || event.y <= bar.implicitHeight)
             return;
 
-        // 点击在 bar 外 → 关闭会话面板
-        if (visibilities.session && !inRightPanel(panels.session, event.x, event.y)) {
+        // 点击在 bar 外 → 关闭会话面板（以按下位置判断，避免右滑刚打开就关闭）
+        if (visibilities.session && !inRightPanel(panels.session, dragStart.x, dragStart.y)) {
             visibilities.session = false;
         }
 
-        // 点击在 bar 外 → 关闭弹窗
+        // 点击在 bar 外 → 关闭仪表盘（以按下位置判断，避免下拉刚打开就关闭）
+        if (visibilities.dashboard && !inTopPanel(panels.dashboard, dragStart.x, dragStart.y)) {
+            visibilities.dashboard = false;
+        }
+
+        // 点击在 bar 外 → 关闭启动器（以按下位置判断，避免上拉刚打开就关闭）
+        if (visibilities.launcher && !inBottomPanel(panels.launcher, dragStart.x, dragStart.y)) {
+            visibilities.launcher = false;
+        }
+
+        // 点击在 bar 外 → 关闭弹窗（释放位置在弹窗外时关闭）
+        // 滑动打开时如果鼠标离开窗口，由 onContainsMouseChanged 的 pressed 保护处理
         if (popouts.currentName !== "wirelesspassword"
             && !inLeftPanel(panels.popouts, event.x, event.y)) {
             popouts.hasCurrent = false;
@@ -148,7 +149,7 @@ CustomMouseArea {
             if (!isShortcutActive("quicktoggles"))
                 visibilities.quicktoggles = false;
 
-            if (popouts.currentName !== "wirelesspassword")
+            if (popouts.currentName !== "wirelesspassword" && !root.pressed)
                 popouts.hasCurrent = false;
 
             if (Config.bar.showOnHover)

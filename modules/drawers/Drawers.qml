@@ -72,7 +72,7 @@ Variants {
 
             StyledRect {
                 anchors.fill: parent
-                opacity: visibilities.session && Config.session.enabled ? 0.5 : 0
+                opacity: visibilities.session && Config.session.enabled || visibilities.launcher || visibilities.dashboard ? 0.5 : 0
                 color: Colours.palette.m3scrim
 
                 Behavior on opacity {
