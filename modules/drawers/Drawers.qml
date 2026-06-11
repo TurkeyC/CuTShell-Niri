@@ -33,12 +33,13 @@ Variants {
 
             mask: Region {
                 readonly property bool extended: visibilities.session && Config.session.enabled
+                readonly property bool captureOnClick: visibilities.launcher || visibilities.dashboard
 
-                x: extended ? 0 : Config.border.thickness
-                y: extended ? 0 : bar.implicitHeight
-                width: extended ? win.width : win.width - Config.border.thickness * 2
-                height: extended ? win.height : win.height - bar.implicitHeight - Config.border.thickness
-                intersection: extended ? Intersection.Combine : Intersection.Xor
+                x: extended || captureOnClick ? 0 : Config.border.thickness
+                y: extended || captureOnClick ? 0 : bar.implicitHeight
+                width: extended || captureOnClick ? win.width : win.width - Config.border.thickness * 2
+                height: extended || captureOnClick ? win.height : win.height - bar.implicitHeight - Config.border.thickness
+                intersection: extended || captureOnClick ? Intersection.Combine : Intersection.Xor
 
                 regions: regions.instances
             }
@@ -56,13 +57,14 @@ Variants {
                 Region {
                     required property Item modelData
                     readonly property bool _extd: visibilities.session && Config.session.enabled
+                    readonly property bool _capture: visibilities.launcher || visibilities.dashboard
 
                     x: modelData.x + Config.border.thickness
                     y: modelData.y + bar.implicitHeight
                     width: modelData.width
                     height: modelData.height
-                    // extended 时用 Combine（不剔除面板），normal 时用 Subtract
-                    intersection: _extd ? Intersection.Combine : Intersection.Subtract
+                    // extended/capture 时用 Combine（面板保持可点），否则用 Subtract（从穿透区域挖出面板）
+                    intersection: _extd || _capture ? Intersection.Combine : Intersection.Subtract
                 }
             }
 

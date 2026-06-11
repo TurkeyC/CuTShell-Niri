@@ -79,8 +79,18 @@ CustomMouseArea {
         dragStart = Qt.point(event.x, event.y);
         draggingBar = dragStart.y < bar.implicitHeight;
 
-        if (event.y >= bar.implicitHeight)
+        // 按下时关闭面板（无论左右键，只要在 bar 外）
+        var px = event.x;
+        var py = event.y;
+        if (py >= bar.implicitHeight) {
+            if (visibilities.dashboard && !inTopPanel(panels.dashboard, px, py)) {
+                visibilities.dashboard = false;
+            }
+            if (visibilities.launcher && !inBottomPanel(panels.launcher, px, py)) {
+                visibilities.launcher = false;
+            }
             return;
+        }
 
         if (event.button === Qt.RightButton) {
             // 右键：非 tray/statusIcons/workspaces 区域 → 切换 dashboard
@@ -109,7 +119,7 @@ CustomMouseArea {
         if (event.button !== Qt.LeftButton || event.y <= bar.implicitHeight)
             return;
 
-        // 点击在 bar 外 → 关闭会话面板（如果在 dim 区域点击）
+        // 点击在 bar 外 → 关闭会话面板
         if (visibilities.session && !inRightPanel(panels.session, event.x, event.y)) {
             visibilities.session = false;
         }
@@ -118,28 +128,6 @@ CustomMouseArea {
         if (popouts.currentName !== "wirelesspassword"
             && !inLeftPanel(panels.popouts, event.x, event.y)) {
             popouts.hasCurrent = false;
-        }
-
-        // 点击在 bar 外 → 关闭启动器
-        if (visibilities.launcher && !inBottomPanel(panels.launcher, event.x, event.y)) {
-            visibilities.launcher = false;
-        }
-
-        // 点击在 bar 外 → 关闭仪表盘
-        if (visibilities.dashboard && !inTopPanel(panels.dashboard, event.x, event.y)) {
-            visibilities.dashboard = false;
-        }
-
-        // 点击在 bar 外 → 关闭实用工具
-        if (visibilities.utilities && !inBottomPanel(panels.utilities, event.x, event.y)) {
-            visibilities.utilities = false;
-        }
-
-        // 点击在 bar 外 → 关闭快速开关
-        if (visibilities.quicktoggles
-            && !(inBottomPanel(panels.quicktoggles, event.x, event.y)
-                 && inRightPanel(panels.quicktoggles, event.x, event.y))) {
-            visibilities.quicktoggles = false;
         }
     }
 
