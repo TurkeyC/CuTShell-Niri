@@ -120,6 +120,9 @@ JsonObject {
         property bool background: false
         property bool showDate: true
         property bool showIcon: true
+        property string dateLocale: "ja" // system, en, zh, ja
+        property string dateFormat: "M/d"    // d → 13, dd → 13(补零), yyyyMMdd → 20260613, 任意Qt日期格式
+        property bool showSeconds: true
     }
 
     component Popouts: JsonObject {
