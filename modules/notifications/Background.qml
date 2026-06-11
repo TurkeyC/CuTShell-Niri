@@ -17,36 +17,44 @@ ShapePath {
     strokeWidth: -1
     fillColor: Colours.palette.m3surface
 
+    // 从屏幕左边缘向右，超过 wrapper 宽度 + 圆角值
     PathLine {
-        relativeX: -(root.wrapper.width + root.rounding)
+        relativeX: root.wrapper.width + root.rounding
         relativeY: 0
     }
+    // 右上外弧（朝屏幕方向凸出）
     PathArc {
-        relativeX: root.rounding
+        relativeX: -root.rounding
         relativeY: root.roundingY
         radiusX: root.rounding
         radiusY: Math.min(root.rounding, root.wrapper.height)
+        direction: PathArc.Counterclockwise
     }
+    // 右侧直边
     PathLine {
         relativeX: 0
         relativeY: root.wrapper.height - root.roundingY * 2
     }
+    // 右下外弧（朝屏幕方向凸出）
     PathArc {
-        relativeX: root.fullHeightRounding
+        relativeX: -root.fullHeightRounding
         relativeY: root.roundingY
         radiusX: Math.abs(root.fullHeightRounding)
         radiusY: Math.min(root.rounding, root.wrapper.height)
-        direction: root.fullHeightRounding < 0 ? PathArc.Clockwise : PathArc.Counterclockwise
+        direction: root.fullHeightRounding < 0 ? PathArc.Counterclockwise : PathArc.Clockwise
     }
+    // 底部直边向左
     PathLine {
-        relativeX: root.wrapper.height > 0 ? root.wrapper.width - root.rounding - root.fullHeightRounding : root.wrapper.width
+        relativeX: root.wrapper.height > 0 ? -(root.wrapper.width - root.rounding - root.fullHeightRounding) : -root.wrapper.width
         relativeY: 0
     }
+    // 左下弧连接回屏幕左边缘
     PathArc {
-        relativeX: root.rounding
+        relativeX: -root.rounding
         relativeY: root.rounding
         radiusX: root.rounding
         radiusY: root.rounding
+        direction: PathArc.Counterclockwise
     }
 
     Behavior on fillColor {

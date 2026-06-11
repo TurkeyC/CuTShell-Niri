@@ -35,7 +35,7 @@ Shape {
     Notifications.Background {
         wrapper: root.panels.notifications
 
-        startX: root.width
+        startX: 0
         startY: 0
     }
 
@@ -93,7 +93,7 @@ Shape {
     QuickToggles.QuickTogglesBackground {
         wrapper: root.panels.quicktoggles
 
-        startX: root.width
+        startX: 0
         startY: root.height
     }
 }

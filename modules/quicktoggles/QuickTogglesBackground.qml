@@ -15,44 +15,45 @@ ShapePath {
     strokeWidth: -1
     fillColor: Colours.palette.m3surface
 
-    // Bottom-right panel: starts at (root.width, root.height)
-    // Goes left along bottom edge
+    // Bottom-left panel: starts at (startX, startY) = (0, root.height)
+    // Goes right along bottom edge
     PathLine {
-        relativeX: -(root.wrapper.width + root.rounding)
+        relativeX: root.wrapper.width + root.rounding
         relativeY: 0
     }
     // Outer arc curving up (curves away from screen corner)
     PathArc {
-        relativeX: root.rounding
+        relativeX: -root.rounding
         relativeY: -root.roundingY
         radiusX: root.rounding
         radiusY: Math.min(root.rounding, root.wrapper.height)
-        direction: PathArc.Counterclockwise
+        direction: PathArc.Clockwise
     }
-    // Left edge going up
+    // Right edge going up
     PathLine {
         relativeX: 0
         relativeY: -(root.wrapper.height - root.roundingY * 2)
     }
-    // Outer arc curving right (curves away from screen corner)
+    // Outer arc curving left (curves away from screen corner)
     PathArc {
-        relativeX: root.rounding
+        relativeX: -root.rounding
         relativeY: -root.roundingY
         radiusX: root.rounding
         radiusY: Math.min(root.rounding, root.wrapper.height)
+        direction: PathArc.Counterclockwise
     }
-    // Top edge going right
+    // Top edge going left
     PathLine {
-        relativeX: root.wrapper.height > 0 ? root.wrapper.width - root.rounding * 2 : root.wrapper.width
+        relativeX: root.wrapper.height > 0 ? -(root.wrapper.width - root.rounding * 2) : -root.wrapper.width
         relativeY: 0
     }
-    // Inner arc connecting back to screen edge (bottom-right corner)
+    // Inner arc connecting back to screen edge (bottom-left corner)
     PathArc {
-        relativeX: root.rounding
+        relativeX: -root.rounding
         relativeY: -root.rounding
         radiusX: root.rounding
         radiusY: root.rounding
-        direction: PathArc.Counterclockwise
+        direction: PathArc.Clockwise
     }
 
     Behavior on fillColor {

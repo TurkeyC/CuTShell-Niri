@@ -237,8 +237,8 @@ CustomMouseArea {
             clearShortcutPanel("utilities");
         }
 
-        // Show quicktoggles on hover (bottom-right area)
-        const showQuicktoggles = inBottomPanel(panels.quicktoggles, x, y) && inRightPanel(panels.quicktoggles, x, y);
+        // Show quicktoggles on hover (bottom-left area)
+        const showQuicktoggles = inBottomPanel(panels.quicktoggles, x, y) && inLeftPanel(panels.quicktoggles, x, y);
 
         // Always update visibility based on hover if not in shortcut mode
         if (!isShortcutActive("quicktoggles")) {
@@ -300,7 +300,7 @@ CustomMouseArea {
         function onQuicktogglesChanged() {
             if (root.visibilities.quicktoggles) {
                 // Quicktoggles became visible, check if this should be shortcut mode
-                const inQuicktogglesArea = root.inBottomPanel(root.panels.quicktoggles, root.mouseX, root.mouseY) && root.inRightPanel(root.panels.quicktoggles, root.mouseX, root.mouseY);
+                const inQuicktogglesArea = root.inBottomPanel(root.panels.quicktoggles, root.mouseX, root.mouseY) && root.inLeftPanel(root.panels.quicktoggles, root.mouseX, root.mouseY);
                 if (!inQuicktogglesArea) {
                     root.setShortcutPanel("quicktoggles");
                 }

@@ -15,7 +15,7 @@ Item {
 
     anchors.top: parent.top
     anchors.bottom: parent.bottom
-    anchors.right: parent.right
+    anchors.left: parent.left
 
     implicitWidth: Config.notifs.sizes.width + padding * 2
 
@@ -68,7 +68,7 @@ Item {
         anchors.margins: root.padding
 
         color: "transparent"
-        radius: Appearance.rounding.normal
+        radius: Config.border.rounding
 
         StyledListView {
             id: list
@@ -127,7 +127,7 @@ Item {
                     Anim {
                         target: notif
                         property: "x"
-                        to: (notif.x >= 0 ? Config.notifs.sizes.width : -Config.notifs.sizes.width) * 2
+                        to: -Config.notifs.sizes.width * 2
                         duration: Appearance.anim.durations.normal
                         easing.bezierCurve: Appearance.anim.curves.emphasized
                     }

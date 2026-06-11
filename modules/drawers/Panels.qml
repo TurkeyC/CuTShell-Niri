@@ -70,7 +70,7 @@ Item {
         panel: root
 
         anchors.top: parent.top
-        anchors.right: parent.right
+        anchors.left: parent.left
     }
 
     Session.Wrapper {
@@ -135,7 +135,7 @@ Item {
         visibilities: root.visibilities
 
         anchors.bottom: parent.bottom
-        anchors.right: parent.right
+        anchors.left: parent.left
     }
 
     Toasts.Toasts {

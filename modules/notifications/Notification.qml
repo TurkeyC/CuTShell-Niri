@@ -19,23 +19,8 @@ StyledRect {
     readonly property bool hasAppIcon: modelData.appIcon.length > 0
     readonly property int nonAnimHeight: summary.implicitHeight + (root.expanded ? appName.height + body.height + actions.height + actions.anchors.topMargin : bodyPreview.height) + inner.anchors.margins * 2
     property bool expanded
-    property bool pendingDismiss: false
-
-    Timer {
-        id: undoTimer
-        interval: 3000
-        onTriggered: Notifs.discardNotification(root.modelData.notificationId)
-    }
-
     function startDismiss(): void {
-        pendingDismiss = true;
-        undoTimer.start();
-    }
-
-    function undoDismiss(): void {
-        pendingDismiss = false;
-        undoTimer.stop();
-        root.x = 0;
+        Notifs.discardNotification(root.modelData.notificationId);
     }
 
     color: root.modelData.urgency === NotificationUrgency.Critical ? Colours.palette.m3secondaryContainer : Colours.tPalette.m3surfaceContainer
@@ -417,7 +402,10 @@ StyledRect {
 
                 animate: true
                 textFormat: Text.MarkdownText
-                text: bodyPreviewMetrics.elidedText
+                text: root.modelData.body
+                maximumLineCount: 2
+                elide: Text.ElideRight
+                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 color: Colours.palette.m3onSurfaceVariant
                 font.pointSize: Appearance.font.size.labelLarge
 
@@ -426,16 +414,6 @@ StyledRect {
                 Behavior on opacity {
                     Anim {}
                 }
-            }
-
-            TextMetrics {
-                id: bodyPreviewMetrics
-
-                text: root.modelData.body
-                font.family: bodyPreview.font.family
-                font.pointSize: bodyPreview.font.pointSize
-                elide: Text.ElideRight
-                elideWidth: bodyPreview.width
             }
 
             StyledText {
@@ -500,59 +478,6 @@ StyledRect {
                     delegate: Component {
                         Action {}
                     }
-                }
-            }
-        }
-    }
-
-    // Undo overlay — shown during pending dismiss
-    Rectangle {
-        anchors.fill: parent
-        radius: root.radius
-        color: Colours.palette.m3inverseSurface
-        visible: root.pendingDismiss
-        opacity: root.pendingDismiss ? 1 : 0
-
-        Behavior on opacity {
-            Anim {
-                duration: Appearance.anim.durations.small
-            }
-        }
-
-        Row {
-            anchors.centerIn: parent
-            spacing: Appearance.spacing.lg
-
-            StyledText {
-                anchors.verticalCenter: parent.verticalCenter
-                text: qsTr("Dismissed")
-                color: Colours.palette.m3inverseOnSurface
-                font.pointSize: Appearance.font.size.labelLarge
-            }
-
-            StyledRect {
-                anchors.verticalCenter: parent.verticalCenter
-                radius: Appearance.rounding.full
-                color: Colours.palette.m3inversePrimary
-                implicitWidth: undoText.implicitWidth + Appearance.padding.md * 2
-                implicitHeight: undoText.implicitHeight + Appearance.padding.xs * 2
-
-                StateLayer {
-                    radius: Appearance.rounding.full
-                    color: Colours.palette.m3onSurface
-
-                    function onClicked(): void {
-                        root.undoDismiss();
-                    }
-                }
-
-                StyledText {
-                    id: undoText
-                    anchors.centerIn: parent
-                    text: qsTr("Undo")
-                    color: Colours.palette.m3onSurface
-                    font.pointSize: Appearance.font.size.labelLarge
-                    font.bold: true
                 }
             }
         }
