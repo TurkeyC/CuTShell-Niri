@@ -4,6 +4,7 @@ JsonObject {
     property bool enabled: true
     property int dragThreshold: 30
     property bool vimKeybinds: false
+    property int longPressDuration: 800
     property Commands commands: Commands {}
 
     property Sizes sizes: Sizes {}

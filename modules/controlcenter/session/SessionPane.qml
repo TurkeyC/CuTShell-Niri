@@ -21,6 +21,7 @@ Item {
     property bool enabled: Config.session.enabled ?? true
     property bool vimKeybinds: Config.session.vimKeybinds ?? false
     property int dragThreshold: Config.session.dragThreshold ?? 30
+    property int longPressDuration: Config.session.longPressDuration ?? 800
     property int buttonSize: Config.session.sizes.button ?? 80
 
     anchors.fill: parent
@@ -29,6 +30,7 @@ Item {
         Config.session.enabled = root.enabled;
         Config.session.vimKeybinds = root.vimKeybinds;
         Config.session.dragThreshold = root.dragThreshold;
+        Config.session.longPressDuration = root.longPressDuration;
         Config.session.sizes.button = root.buttonSize;
         Config.markDirty("session");
     }
@@ -133,6 +135,25 @@ Item {
 
                             onValueModified: newValue => {
                                 root.dragThreshold = Math.round(newValue);
+                                root.saveConfig();
+                            }
+                        }
+
+                        SliderInput {
+                            Layout.fillWidth: true
+
+                            label: qsTr("Hold duration")
+                            value: root.longPressDuration
+                            from: 300
+                            to: 3000
+                            stepSize: 100
+                            suffix: "ms"
+                            validator: IntValidator { bottom: 300; top: 3000 }
+                            formatValueFunction: val => Math.round(val).toString()
+                            parseValueFunction: text => parseInt(text)
+
+                            onValueModified: newValue => {
+                                root.longPressDuration = Math.round(newValue);
                                 root.saveConfig();
                             }
                         }

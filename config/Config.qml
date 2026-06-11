@@ -363,6 +363,7 @@ Singleton {
             enabled: session.enabled,
             dragThreshold: session.dragThreshold,
             vimKeybinds: session.vimKeybinds,
+            longPressDuration: session.longPressDuration,
             commands: {
                 logout: session.commands.logout,
                 shutdown: session.commands.shutdown,
