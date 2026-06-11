@@ -119,6 +119,28 @@ CustomMouseArea {
             && !inLeftPanel(panels.popouts, event.x, event.y)) {
             popouts.hasCurrent = false;
         }
+
+        // 点击在 bar 外 → 关闭启动器
+        if (visibilities.launcher && !inBottomPanel(panels.launcher, event.x, event.y)) {
+            visibilities.launcher = false;
+        }
+
+        // 点击在 bar 外 → 关闭仪表盘
+        if (visibilities.dashboard && !inTopPanel(panels.dashboard, event.x, event.y)) {
+            visibilities.dashboard = false;
+        }
+
+        // 点击在 bar 外 → 关闭实用工具
+        if (visibilities.utilities && !inBottomPanel(panels.utilities, event.x, event.y)) {
+            visibilities.utilities = false;
+        }
+
+        // 点击在 bar 外 → 关闭快速开关
+        if (visibilities.quicktoggles
+            && !(inBottomPanel(panels.quicktoggles, event.x, event.y)
+                 && inRightPanel(panels.quicktoggles, event.x, event.y))) {
+            visibilities.quicktoggles = false;
+        }
     }
 
     onContainsMouseChanged: {
