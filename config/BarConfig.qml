@@ -66,8 +66,9 @@ JsonObject {
 
     component ScrollActions: JsonObject {
         property bool workspaces: true
-        property bool volume: true
+        property bool volume: false
         property bool brightness: true
+        property bool switchWindows: true
     }
 
     component Workspaces: JsonObject {

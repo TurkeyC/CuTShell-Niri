@@ -88,6 +88,8 @@ RowLayout {
                 Audio.incrementVolume();
             else if (angleDelta.y < 0)
                 Audio.decrementVolume();
+        } else if (Config.bar.scrollActions.switchWindows) {
+            Niri.switchToColumnLeftRight(angleDelta.y > 0 ? "left" : "right");
         }
     }
 

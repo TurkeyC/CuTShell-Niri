@@ -204,6 +204,11 @@ Singleton {
         return NiriIpc.action("focus-workspace-" + direction, []);
     }
 
+    function switchToColumnLeftRight(direction) {
+        if (!niriAvailable) return false;
+        return NiriIpc.action("focus-column-" + direction, []);
+    }
+
     function switchToWorkspaceByIndex(index) {
         if (!niriAvailable || index < 0 || index >= allWorkspaces.length) return false;
         return switchToWorkspace(allWorkspaces[index].idx);
