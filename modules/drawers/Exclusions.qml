@@ -17,15 +17,15 @@ Scope {
     }
 
     ExclusionZone {
-        anchors.top: true
-    }
-
-    ExclusionZone {
         anchors.right: true
     }
 
     ExclusionZone {
         anchors.bottom: true
+    }
+
+    ExclusionZone {
+        anchors.left: true
     }
 
     component ExclusionZone: StyledWindow {
