@@ -35,22 +35,27 @@ Singleton {
         return item[key];
     }
 
+    // Subclass can set this to a function(item) that returns extra score (e.g. click frequency * weight)
+    property var extraScore: function(item) { return 0; }
+
     function query(search: string): list<var> {
         search = transformSearch(search);
         if (!search)
-            return [...list];
+            return [...list].sort((a, b) => extraScore(b) - extraScore(a));
 
         if (useFuzzy)
             return Fuzzy.go(search, fuzzyPrepped, Object.assign({
                 all: true,
                 keys,
-                scoreFn: r => weights.reduce((a, w, i) => a + r[i].score * w, 0)
+                scoreFn: r => weights.reduce((a, w, i) => a + r[i].score * w, 0) + extraScore(r.obj._item)
             }, extraOpts)).map(r => r.obj._item);
 
         return fzf.find(search).sort((a, b) => {
-            if (a.score === b.score)
+            const scoreA = a.score + extraScore(a.item);
+            const scoreB = b.score + extraScore(b.item);
+            if (scoreA === scoreB)
                 return selector(a.item).trim().length - selector(b.item).trim().length;
-            return b.score - a.score;
+            return scoreB - scoreA;
         }).map(r => r.item);
     }
 }

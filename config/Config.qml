@@ -312,6 +312,7 @@ Singleton {
             vimKeybinds: launcher.vimKeybinds,
             favouriteApps: launcher.favouriteApps,
             hiddenApps: launcher.hiddenApps,
+            clickFrequencyWeight: launcher.clickFrequencyWeight,
             useFuzzy: {
                 apps: launcher.useFuzzy.apps,
                 actions: launcher.useFuzzy.actions,

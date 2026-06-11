@@ -12,6 +12,7 @@ JsonObject {
     property bool vimKeybinds: false
     property list<string> favouriteApps: []
     property list<string> hiddenApps: []
+    property real clickFrequencyWeight: 1 // Weight of click frequency in sorting (0 = disabled, higher = more influence)
     property UseFuzzy useFuzzy: UseFuzzy {}
     property Sizes sizes: Sizes {}
 

@@ -56,6 +56,21 @@ ColumnLayout {
             }
         }
 
+        SliderInput {
+            Layout.fillWidth: true
+            label: qsTr("Click frequency weight")
+            value: Config.launcher.clickFrequencyWeight
+            from: 0
+            to: 10
+            stepSize: 0.1
+            decimals: 1
+            suffix: "×"
+            onValueModified: newValue => {
+                Config.launcher.clickFrequencyWeight = newValue;
+                Config.markDirty("launcher");
+            }
+        }
+
         ToggleRow {
             label: qsTr("Enable dangerous actions")
             checked: Config.launcher.enableDangerousActions

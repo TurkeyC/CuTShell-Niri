@@ -1,6 +1,7 @@
 pragma Singleton
 
 import qs.config
+import qs.services
 import qs.utils
 import Quickshell
 import QtQuick
@@ -8,7 +9,17 @@ import QtQuick
 Searcher {
     id: root
 
+    Component.onCompleted: {
+        root.extraScore = function(item) {
+            const w = Config.launcher.clickFrequencyWeight;
+            if (w <= 0) return 0;
+            const id = item?.id;
+            return id ? FrequencyTracker.get(id) * w : 0;
+        };
+    }
+
     function launch(entry: DesktopEntry): void {
+        FrequencyTracker.increment(entry.id ?? "");
         if (entry.runInTerminal)
             Quickshell.execDetached({
                 command: [...Config.general.apps.terminal, `${Quickshell.shellDir}/assets/wrap_term_launch.sh`, ...entry.command],
