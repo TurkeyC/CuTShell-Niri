@@ -1,789 +1,377 @@
----
-
-## 🪦 Archived — I Moved On (and That's Okay!)
-
-Hey there, traveler! 👋
-
-This repo is now **archived** — meaning it's read-only, frozen in time like a really cool fossil. 🦕
-
-I had an absolute blast building this thing. It was my first time ever touching **Quickshell**, and honestly? I learned *so much* — from QML quirks to wrangling IPC commands at 2am. If you poked around the code and thought "what was he thinking here?", the answer is probably "I have no idea, but it worked!" 😅
-
-### So... what happened?
-
-I switched to **Hyprland** 🏃, and Hyprland has native scrolling support built right in — so a lot of what I was hacking around in Niri no longer needed a custom shell to solve. It made more sense to move my energy there.
-
-### Is this usable?
-
-Honestly? **It might still work for you!** The code is all here, the README has the full setup guide, and nothing is going anywhere. Fork it, adapt it, learn from it — that's exactly what I did from the projects that inspired me. 🙏
-
-### Shoutouts before I go
-
-This whole thing wouldn't exist without [jutraim](https://github.com/jutraim/niri-caelestia-shell), [Caelestia](https://github.com/caelestia-dots/shell), and [end-4](https://github.com/end-4/dots-hyprland) — absolute legends. 🌟
-
-Thanks for starring, filing issues, and being curious. It meant a lot.
-
-*— Ayush, now somewhere in Hyprland-land* 🚀
-
----
-
-
-
-<h1 align=center>🌌 Niri-Caelestia Shell</h1>
+<h1 align=center>🌌 CuTShell-Niri</h1>
 
 <div align=center>
 
-![GitHub last commit](https://img.shields.io/github/last-commit/Ayushkr2003/niri-caelestia-shell?style=for-the-badge&labelColor=101418&color=9ccbfb)
-![GitHub Repo stars](https://img.shields.io/github/stars/Ayushkr2003/niri-caelestia-shell?style=for-the-badge&labelColor=101418&color=b9c8da)
-![GitHub repo size](https://img.shields.io/github/repo-size/Ayushkr2003/niri-caelestia-shell?style=for-the-badge&labelColor=101418&color=d3bfe6)
+*为 Niri 窗口管理器打造的 Quickshell 桌面环境*
 
 </div>
-
-
-> Personal fork of [jutraim's niri-caelestia-shell](https://github.com/jutraim/niri-caelestia-shell) (Niri adaptation of [Caelestia Shell](https://github.com/caelestia-dots/shell)) with my tweaks. **WIP** 🚧
 
 <div align=center>
 
-https://github.com/user-attachments/assets/0840f496-575c-4ca6-83a8-87bb01a85c5f
+[![GitHub last commit](https://img.shields.io/github/last-commit/TurkeyC/CuTShell-Niri?style=for-the-badge&labelColor=101418&color=9ccbfb)](https://github.com/TurkeyC/CuTShell-Niri)
+[![GitHub repo size](https://img.shields.io/github/repo-size/TurkeyC/CuTShell-Niri?style=for-the-badge&labelColor=101418&color=d3bfe6)](https://github.com/TurkeyC/CuTShell-Niri)
 
 </div>
 
+---
 
-<div align=center> <h2>  Screenshots (OLD)</h2>
+## 📜 分支谱系
 
-| App Launcher | Clipboard |
+```
+caelestia-dots/shell                    ← Caelestia 原版（Hyprland）
+  └─ jutraim/niri-caelestia-shell       ← 移植到 Niri 窗口管理器
+       └─ AyushKr2003/niri-caelestia-shell  ← 增强功能、添加配置编辑器等
+            └─ TurkeyC/CuTShell-Niri    ← 🎯 本仓库：深度定制与 Fedora 适配
+```
+
+本项目是 [AyushKr2003/niri-caelestia-shell](https://github.com/AyushKr2003/niri-caelestia-shell) 的个人深度定制分支，而上游依次继承自 [jutraim 的 Niri 移植版](https://github.com/jutraim/niri-caelestia-shell) 和 [Caelestia Shell 原版](https://github.com/caelestia-dots/shell)。
+
+---
+
+## ✨ 我的修改
+
+基于 AyushKr2003/niri-caelestia-shell，我做了大量深度定制与修复：
+
+### 🖥️ 窗口管理器集成
+- **Niri IPC C++ 原生插件** — 用 C++ 编写 `NiriIpc` 原生插件，通过 `niri-ipc` socket 实现高效的双向通信，替代纯 QML 方案
+- **Niri IPC 事件解析器** — 实时解析 Niri 事件流，支持 workspace、window、output、keyboard layout 等事件的推送更新
+- **Niri 工作区分组** — 按应用名自动对窗口图标分组，整洁展示
+- **工作区拖拽排序** — 支持拖拽窗口到不同工作区，带状态机管理逐步移动
+- **工作区上下文菜单** — 右键菜单支持窗口聚焦、关闭、切换浮动、全屏等操作
+- **Niri 仪表盘控制** — Dashboard 面板集成 Niri IPC 控制入口
+
+### 🧩 新增组件
+- **Task Manager（任务管理器）** — 实时 CPU/GPU/内存监视（AMD/NVIDIA，暂不支持 Intel）
+- **WindowDecorations（窗口装饰）** — 窗口标题/装饰小部件
+- **ActiveWindow 增强** — Firefox 标题清理、布局修复
+- **Battery Monitor（电池监控）** — 可配置多级警告通知（带自定义图标和文字），临界值自动休眠
+- **System Monitor（系统监视器）** — Dashboard 中的实时性能图表
+
+### ⚙️ 配置与适配
+- **配置路径变更** — 从 `~/.config/niri_caelestia/` 迁移至 `~/.config/quickshell/caelestia/`，统一管理
+- **Fedora 43 适配** — 完整的 Fedora COPR 安装指南与依赖列表
+- **中文文档** — 安装指南、已知问题、配置说明全部中文化
+
+### 🔧 问题修复
+- `OccupiedBg.qml` — 修复 `pills[-1]` 导致的 `TypeError: Value is undefined`
+- `_env.sh` — 修复 jq `//` 运算符将 `false` 错误视为 falsy 值的问题
+- 序列化修复 — `serializeAppearance()` 不再丢失 `wallpaperTheming` 段
+- 多项 QML 组件健壮性改进
+
+---
+
+## 📸 截图
+
+| 应用启动器 | 剪贴板 |
 |:---:|:---:|
 | ![App Launcher](images/screenshorts/app_launcher.png) | ![Clipboard](images/screenshorts/clipboard.png) |
 
-| Quick Toggles | Weather |
+| 快捷开关 | 天气 |
 |:---:|:---:|
 | ![Quick Toggles](images/screenshorts/quicktoggles.png) | ![Weather](images/screenshorts/weather.png) |
 
-| Niri Things | Dashboard |
+| Niri 集成 | Dashboard |
 |:---:|:--:|
 | ![Niri Things](images/screenshorts/niriThings.png) | ![Dashboard](images/screenshorts/dashboard.png) |
 
-</div>
-
-> [!CAUTION]
-> This is my personal fork and it's **STILL WORK IN PROGRESS**.
->
-> I am still learning Quickshell and this is my first time working with it. I'm trying to learn and improve! 🚀
->
-> This repo is **ONLY for the desktop shell** of the Caelestia dots. For the default Caelestia dots, head to [the main repo](https://github.com/caelestia-dots/caelestia) instead.
-
-
-
 ---
 
-## ✨ My Changes
+## 📦 依赖
 
-Based on [jutraim's niri-caelestia-shell](https://github.com/jutraim/niri-caelestia-shell) with these additions:
+### 核心
+- `quickshell` — 桌面 Shell 框架（Arch: `quickshell-git` AUR / Fedora: COPR）
+- `networkmanager` + `networkmanager-qt` — 网络管理
+- `qt6-declarative` — Qt6 QML 运行时
+- `glibc`、`gcc-libs` — 系统库
 
-- **Config Editor**: Visual JSON editor with searchable icon/font pickers, array editing (battery warnings, idle timeouts), nested object support
-- **Battery Monitor**: Configurable warning notifications at custom levels with icons and messages
-- **Enhanced Workspace Bar**: Program icons, drag-to-reorder windows, context menus, app grouping
-- **System Monitor**: Real-time CPU/GPU/Memory stats (AMD/NVIDIA, no Intel yet)
-- **Niri Integration**: Dashboard controls for Niri IPC commands
-- **Launcher Modes**: Integrated clipboard, web search, calculator, and more — all triggered via `>` prefix
-- **OCR & Google Lens**: Region picker modes for text extraction (Tesseract) and visual search (Google Lens)
-- **Area Picker Modes**: Custom cursor indicators for screenshot, OCR, and Lens modes
+### 音频与可视化
+- `cava` + `libcava` — 音频频谱可视化
+- `aubio` — 节拍检测
+- `libpipewire` — PipeWire 音频管道
+- `ddcutil` — 外接显示器 DDC/CI 亮度控制
+- `brightnessctl` — 笔记本屏幕亮度控制
 
-All built on top of the Niri window manager adaptation from the upstream fork.
+### 字体
+- `ttf-material-icons-git` / `material-symbols-fonts` — Material 图标字体
+- `ttf-jetbrains-mono` — 等宽字体
 
----
+### 工具
+- `grim` — Wayland 截图
+- `swappy` — 截图编辑
+- `libqalculate` — 计算器功能
+- `tesseract` + `tesseract-data-eng` — OCR 文字识别
+- `wl-clipboard` + `cliphist` — Wayland 剪贴板历史
+- `app2unit` — 应用启动包装（见下方说明）
+- `curl` — HTTP 请求（天气等）
+- `python-materialyoucolor` / `matugen` — 壁纸动态取色
 
-## 📦 Dependencies
+### 构建依赖
+- `cmake`、`ninja` — 构建系统
+- `qt6-qtbase-devel`、`qt6-qtdeclarative-devel` — Qt6 开发头文件
+- `qt6-qtmultimedia-devel` — 多媒体支持
+- `qt6-qtsvg-devel` — SVG 支持
+- `pipewire-devel` — PipeWire 开发头文件
+- `aubio-devel` — Aubio 开发头文件
+- `libqalculate-devel` — Qalculate 开发头文件
+- `gcc-c++` — C++ 编译器
 
-You need both runtime dependencies and development headers.
+### 关于 `app2unit`
 
-<br>
+`app2unit` 是 Quickshell 的应用启动包装工具。如果包管理器未提供，可手动创建：
 
-* All dependencies in plain text:
-   * `quickshell-git networkmanager fish glibc qt6-declarative gcc-libs cava libcava aubio libpipewire ddcutil brightnessctl ttf-material-icons-git ttf-jetbrains-mono grim swappy app2unit libqalculate python-materialyoucolor wl-clipboard cliphist tesseract tesseract-data-eng curl`
+```bash
+sudo tee /usr/local/bin/app2unit << 'SCRIPT'
+#!/bin/bash
+exec systemd-run --user --scope --collect "$@"
+SCRIPT
+sudo chmod +x /usr/local/bin/app2unit
+```
 
 > [!NOTE]
->
-> Unlike the default shell,
-> [`caelestia-cli`](https://github.com/caelestia-dots/cli) is **not required for Niri**.
-
-<details><summary> <b> Detailed info about all dependencies </b></summary>
-
-<div align=center>
-
-| Category | Packages |
-|---|---|
-| Core | `quickshell-git`, `networkmanager`, `networkmanager-qt`, `fish`, `glibc`, `qt6-declarative`, `gcc-libs` |
-| Audio & Visual | `cava`, `libcava`, `aubio`, `libpipewire`, `ddcutil`, `brightnessctl`, `materialyoucolor` |
-| Fonts | `ttf-material-icons-git`, `ttf-jetbrains-mono` |
-| Screenshot & Utils | `grim`, `swappy`, `app2unit`, `libqalculate`, `tesseract`, `tesseract-data-eng`, `curl` |
-| Clipboard | `wl-clipboard`, `cliphist` |
-| Build | `cmake`, `ninja` |
-
-
-</div>
-
-
-### Manual installation
-
-To install the shell manually, install all dependencies and clone this repo to `~/.config/quickshell/niri-caelestia-shell`.
-Then simply build and install using `cmake`.
-
-
-</details>
+> 与 Caelestia 原版不同，[`caelestia-cli`](https://github.com/caelestia-dots/cli) **不是本项目的运行时依赖**。
 
 ---
 
-## ⚡ Installation
+## ⚡ 安装
 
+### 前置条件
 
-### Single Command Installation (Arch Linux)
+确保已安装 Niri 窗口管理器，并已配置好 `~/.config/niri/config.kdl`。
 
-For a fully automated installation including all dependencies, system configuration, and building the shell:
+### 1. 克隆仓库
 
-```sh
-git clone https://github.com/Ayushkr2003/niri-caelestia-shell && cd niri-caelestia-shell && ./scripts/setup/v2/setup install
+```bash
+mkdir -p ~/.config/quickshell
+cd ~/.config/quickshell
+git clone https://github.com/TurkeyC/CuTShell-Niri caelestia
 ```
 
-> [!WARNING]
-> This automated installer is currently in beta and may contain bugs. I am still working on refining the process! If you encounter issues, please use the Manual Build steps below.
+### 2. 安装依赖
 
-### Manual Build
-
-1. Install dependencies.
-2. Clone the repo:
-
-    ```sh
-    cd ~/.config/quickshell
-    git clone https://github.com/Ayushkr2003/niri-caelestia-shell
-    ```
-3. Build:
-
-    ```sh
-    cd ~/.config/quickshell/niri-caelestia-shell
-    cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/
-    cmake --build build
-    sudo cmake --install build
-    ```
-    It's trying to install into system paths (`/usr/lib/qt6/qml/Caelestia/...`),
-    so grab the necessary permissions or use sudo while installing.
-
-    If you get `VERSION is not set and failed to get from git` error, that means I forgot to tag version. You can do `git tag 1.1.1` to work around it :)
-
-4. Run the setup script (installs system packages, Python venv, services):
-
-    ```sh
-    ./scripts/setup/setup.sh
-    ```
-
-    > The setup script supports flags: `--skip-deps`, `--skip-python`, `--skip-services`
-
-5. Deploy dotfiles:
-
-    ```sh
-    cp -r dotfiles/.config/* ~/.config/
-    ```
-
-    > [!IMPORTANT]
-    > Copying the `matugen` folder to `~/.config/` is **mandatory** for system-wide color syncing to work.
-
-6. (Optional) Setup SDDM Theme:
-
-    ```sh
-    bash dotfiles/niri-caelestia-sddm/setup.sh
-    ```
-    > Select option `1` during setup to sync colors directly with the shell.
-
-<!-- 
-    
-    cmake -B build -G Ninja \
-    -DCMAKE_BUILD_TYPE=Release \
-    -DCMAKE_INSTALL_PREFIX=$HOME \
-    -DINSTALL_QSCONFDIR=$HOME/.config/quickshell/niri-caelestia-shell
-    cmake --build build
-    cmake --install build
-    
-    run it by 
-    QML_IMPORT_PATH=$HOME/usr/lib/qt6/qml qs -c niri-caelestia-shell
-    so that it won't overlap with hyprland caelestia -->
-
-### 🔃 Updating
-You can update by running `git pull` in `~/.config/quickshell/niri-caelestia-shell`.
-
-```sh
-cd ~/.config/quickshell/niri-caelestia-shell
-git pull
+**Arch Linux：**
+```bash
+sudo pacman -S cmake ninja qt6-declarative qt6-qtmultimedia qt6-qtsvg \
+  glibc gcc-libs networkmanager networkmanager-qt pipewire aubio \
+  libqalculate grim swappy tesseract tesseract-data-eng wl-clipboard \
+  curl ddcutil brightnessctl fish glibc
+# AUR
+yay -S quickshell-git ttf-material-icons-git ttf-jetbrains-mono cliphist cava
+pip install materialyoucolor
 ```
 
----
+**Fedora 43+：**
+```bash
+# 先通过 COPR 安装 quickshell
+sudo dnf install material-symbols-fonts matugen cliphist wl-clipboard grim \
+  tesseract brightnessctl ddcutil libnotify NetworkManager xdg-utils cava \
+  papirus-icon-theme fish
+sudo dnf install cmake gcc-c++ qt6-qtbase-devel qt6-qtdeclarative-devel \
+  qt6-qtmultimedia-devel qt6-qtsvg-devel pipewire-devel aubio-devel \
+  libqalculate-devel
+```
 
-## Theme Setup
+### 3. 构建与安装
 
-Detailed prerequisites and step-by-step setup for wallpaper-driven theming are provided in `THEME.md`. See: [THEME.md](THEME.md)
+```bash
+cd ~/.config/quickshell/caelestia
 
----
+# 配置
+cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
 
-## 🚀 Usage
+# 编译
+cmake --build build -j$(nproc)
 
-The shell can be started via the `qs -c niri-caelestia-shell` on your preferred terminal.
-<sub> (`qs` and `quickshell` are interchangable.) </sub>
+# 安装（Arch Linux）
+sudo cmake --install build --prefix /
 
+# 安装（Fedora — 注意 QML 路径不同！）
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DINSTALL_QMLDIR="usr/lib64/qt6/qml"
+sudo cmake --install build --prefix /
+```
 
-* Example line for niri `config.kdl` to launch the shell at startup:
+> [!IMPORTANT]
+> Fedora 的 Qt6 QML 路径是 `/usr/lib64/qt6/qml/`，而不是 `/usr/lib/qt6/qml/`。不指定正确的路径会导致 QML 引擎加载到系统自带的旧版 Caelestia 插件，缺少 `CachingImageManager` 等自定义类型。
 
-   ```
-   spawn-at-startup "quickshell" "-c" "niri-caelestia-shell" "-n"
-   ```
+### 4. 运行 setup 脚本
 
-### Custom Shortcuts/IPC
+```bash
+./scripts/setup/setup.sh
+```
 
+支持参数：`--skip-deps`、`--skip-python`、`--skip-services`
 
-All IPC commands can be called via `quickshell -c niri-caelestia-shell ipc call ...`
+### 5. 部署 dotfiles（可选）
 
-* For example:
+```bash
+cp -r dotfiles/.config/* ~/.config/
+```
 
-   ```sh
-   qs -c niri-caelestia-shell ipc call mpris getActive <trackTitle>
-   ```
+> 复制 `matugen` 文件夹到 `~/.config/` 是壁纸动态取色功能的**必要条件**。
 
-* Example shortcut in `config.kdl` to toggle the launcher drawer:
-    ```sh
-    Mod+Space { spawn  "qs" "-c" "niri-caelestia-shell" "ipc" "call" "drawers" "toggle" "launcher"; }
-    ```
+### 6. 启动 Shell
 
-    ```sh
-    Mod+Space hotkey-overlay-title="Caelestia app launcher" { spawn-sh "qs -c niri-caelestia-shell ipc call drawers toggle launcher"; }
-    ```
+```bash
+quickshell --config caelestia
+```
 
-<br>
-
- The list of IPC commands can be shown via `qs -c niri-caelestia-shell ipc show`.
-
-<br>
-
-<details><summary> <b> Ipc Commands </b></summary>
-
-  ```sh
-  ❯ qs -c niri-caelestia-shell ipc show
-  target picker
-    function open(): void
-    function openFreeze(): void
-    function regionOcr(): void
-    function regionSearch(): void
-  target quicktoggles
-    function open(): void
-    function toggle(): void
-    function close(): void
-  target idleInhibitor
-    function toggle(): void
-    function enable(): void
-    function isEnabled(): bool
-    function disable(): void
-  target wallpaper
-    function get(): string
-    function set(path: string): void
-    function list(): string
-  target clipboard
-    function open(): void
-    function toggle(): void
-    function close(): void
-  target drawers
-    function toggle(drawer: string): void
-    function list(): string
-  target controlCenter
-    function open(): void
-  target toaster
-    function info(title: string, message: string, icon: string): void
-    function success(title: string, message: string, icon: string): void
-    function warn(title: string, message: string, icon: string): void
-    function error(title: string, message: string, icon: string): void
-  target lock
-    function isLocked(): bool
-    function lock(): void
-    function unlock(): void
-  target mpris
-    function playPause(): void
-    function pause(): void
-    function getActive(prop: string): string
-    function play(): void
-    function next(): void
-    function list(): string
-    function stop(): void
-    function previous(): void
-  target notifs
-    function clear(): void
-  target brightness
-    function setFor(query: string, value: string): string
-    function get(): real
-    function set(value: string): string
-    function getFor(query: string): real
-  ```
-
-</details>
-
-## If you want blur overview add this in your NIRI config
-```kdl
-
-layer-rule {
-    match namespace="quickshell:Backdrop"
-    place-within-backdrop true
-    opacity 1.0
-}
-````
-
-<details><summary> <b> Example Niri config.kdl </b></summary>
+在 Niri 配置中设置为自启动：
 
 ```kdl
-// Startup commands
-spawn-sh-at-startup "wl-paste --type text --watch cliphist store &"
-spawn-sh-at-startup "wl-paste --type image --watch cliphist store &"
-spawn-sh-at-startup "qs -c niri-caelestia-shell"
-
-environment {
-    XDG_CURRENT_DESKTOP "niri"
-    XDG_MENU_PREFIX "plasma-"  // Required for Dolphin file associations
-    QT_QPA_PLATFORM "wayland"
-    ELECTRON_OZONE_PLATFORM_HINT "auto"
-    QT_QPA_PLATFORMTHEME "kde"
-    QT_STYLE_OVERRIDE "Darkly"
-}
-
-binds {
-    // System
-    Mod+Tab repeat=false { toggle-overview; }
-    Mod+Shift+E { quit; }
-    Mod+Escape allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
-    
-    // Launcher
-    Mod+Space repeat=false { spawn-sh "qs -c niri-caelestia-shell ipc call drawers toggle launcher"; }
-    
-    // Clipboard
-    Mod+V repeat=false { spawn-sh "qs -c niri-caelestia-shell ipc call clipboard open"; } 
-    
-    // Lock screen
-    Mod+L { spawn-sh "qs -c niri-caelestia-shell ipc call lock lock"; }
-    
-    // Region/Screenshot tools
-    Mod+Shift+S { spawn-sh "qs -c niri-caelestia-shell ipc call picker open"; }
-    
-    // OCR (extract text from screen region)
-    Mod+Shift+X { spawn-sh "qs -c niri-caelestia-shell ipc call picker regionOcr"; }
-    
-    // Google Lens (visual search from screen region)
-    Mod+Shift+A { spawn-sh "qs -c niri-caelestia-shell ipc call picker regionSearch"; }
-    
-    // Applications (change "kitty" to your preferred terminal)
-    Mod+T { spawn "kitty"; }
-    Mod+Return { spawn "kitty"; }
-    Super+E { spawn "dolphin"; }
-    
-    // Window management
-    Mod+Q repeat=false { close-window; }
-    Mod+D { maximize-column; }
-    Mod+F { fullscreen-window; }
-    Mod+Alt+Space { toggle-window-floating; }
-
-    // Screenshots (native)
-    Print { screenshot; }
-    Ctrl+Print { screenshot-screen; }
-    Alt+Print { screenshot-window; }
-    
-    // ========================================================================
-    // HARDWARE KEYS - Audio, Brightness, Media
-    // ========================================================================
-    
-    // Volume (hardware keys)
-    XF86AudioRaiseVolume allow-when-locked=true { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SINK@ 0; wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%+"; }
-    XF86AudioLowerVolume allow-when-locked=true { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SINK@ 0; wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"; }
-    XF86AudioMute allow-when-locked=true { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"; }
-    XF86AudioMicMute allow-when-locked=true { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"; }
-
-    // Brightness (hardware keys) - change eDP-1 to your monitor name by running "niri msg outputs"
-    XF86MonBrightnessUp { spawn-sh "qs -c niri-caelestia-shell ipc call brightness setFor eDP-1 +5%"; }
-    XF86MonBrightnessDown { spawn-sh "qs -c niri-caelestia-shell ipc call brightness setFor eDP-1 10%-"; }
-    
-    // Session/Power menu
-    Ctrl+Alt+Delete { spawn-sh "qs -c niri-caelestia-shell ipc call drawers toggle session"; }
-}
-
-layer-rule {
-    match namespace="quickshell:Backdrop"
-    place-within-backdrop true
-    opacity 1.0
-}
+spawn-at-startup "quickshell" "-c" "caelestia" "-n"
 ```
-
-</details>
 
 ---
 
-## ⚙️ Configuration
+## 🚀 使用方法
 
-Config lives in:
+### IPC 快捷键
 
-```
-~/.config/niri_caelestia/shell.json
-```
-<details><summary> <b> Example JSON </b></summary>
+所有 IPC 命令通过 `quickshell -c caelestia ipc call ...` 调用。
 
-```json
-{
-    "appearance": {
-        "anim": {
-            "durations": {
-                "scale": 1
-            }
-        },
-        "font": {
-            "family": {
-                "clock": "Rubik",
-                "material": "Material Symbols Rounded",
-                "mono": "JetBrains Mono Nerd Font",
-                "sans": "Rubik"
-            },
-            "size": {
-                "scale": 1
-            }
-        },
-        "padding": {
-            "scale": 1
-        },
-        "rounding": {
-            "scale": 1
-        },
-        "spacing": {
-            "scale": 1
-        },
-        "transparency": {
-            "enabled": false,
-            "base": 0.85,
-            "layers": 0.4
-        }
-    },
-    "general": {
-        "apps": {
-            "terminal": ["kitty"],
-            "audio": ["pavucontrol"],
-            "playback": ["mpv"],
-            "explorer": ["thunar"]
-        },
-        "battery": {
-            "warnLevels": [
-                {
-                    "level": 30,
-                    "title": "Low battery",
-                    "message": "You might want to plug in a charger",
-                    "icon": "battery_android_frame_2"
-                },
-                {
-                    "level": 20,
-                    "title": "Did you see the previous message?",
-                    "message": "You should probably plug in a charger <b>now</b>",
-                    "icon": "battery_android_frame_1"
-                },
-                {
-                    "level": 10,
-                    "title": "Critical battery level",
-                    "message": "PLUG THE CHARGER RIGHT NOW!!",
-                    "icon": "battery_android_alert",
-                    "critical": true
-                }
-            ],
-            "criticalLevel": 3
-        },
-        "idle": {
-            "lockBeforeSleep": true,
-            "inhibitWhenAudio": true,
-            "timeouts": [
-                {
-                    "timeout": 180,
-                    "idleAction": "lock"
-                },
-                {
-                    "timeout": 300,
-                    "idleAction": "dpms off",
-                    "returnAction": "dpms on"
-                },
-                {
-                    "timeout": 600,
-                    "idleAction": ["systemctl", "suspend-then-hibernate"]
-                }
-            ]
-        }
-    },
-    "background": {
-        "desktopClock": {
-            "enabled": true
-        },
-        "enabled": true,
-        "visualiser": {
-            "blur": false,
-            "enabled": false,
-            "autoHide": true,
-            "rounding": 1,
-            "spacing": 1
-        }
-    },
-    "bar": {
-        "clock": {
-            "showIcon": true
-        },
-        "dragThreshold": 20,
-        "entries": [
-            {
-                "id": "logo",
-                "enabled": true
-            },
-            {
-                "id": "workspaces",
-                "enabled": true
-            },
-            {
-                "id": "spacer",
-                "enabled": true
-            },
-            {
-                "id": "activeWindow",
-                "enabled": true
-            },
-            {
-                "id": "spacer",
-                "enabled": true
-            },
-            {
-                "id": "tray",
-                "enabled": true
-            },
-            {
-                "id": "clock",
-                "enabled": true
-            },
-            {
-                "id": "statusIcons",
-                "enabled": true
-            },
-            {
-                "id": "power",
-                "enabled": true
-            }
-        ],
-        "persistent": true,
-        "popouts": {
-            "activeWindow": true,
-            "statusIcons": true,
-            "tray": true
-        },
-        "scrollActions": {
-            "brightness": true,
-            "workspaces": true,
-            "volume": true
-        },
-        "showOnHover": true,
-        "status": {
-            "showAudio": false,
-            "showBattery": true,
-            "showBluetooth": true,
-            "showKbLayout": false,
-            "showMicrophone": false,
-            "showNetwork": true,
-            "showLockStatus": true
-        },
-        "tray": {
-            "background": false,
-            "compact": false,
-            "iconSubs": [],
-            "recolour": false
-        },
-        "workspaces": {
-            "label": "  ",
-            
-            
-            "activeIndicator": true,
-            "activeLabel": "󰮯",
-            "activeTrail": false,
-            "groupIconsByApp": true,
-            "groupingRespectsLayout": false,
-            "windowRighClickContext": true,
-            "label": "⊙",
-            "occupiedBg": true,
-            "occupiedLabel": "󰮯",
-            "showWindows": false,
-            "shown": 4,
-            "windowIconImage": false,
-            "focusedWindowBlob": false,
-            "windowIconGap": 0,
-            "windowIconSize": 30
-        },
-        "excludedScreens": [""],
-        "activeWindow": {
-            "inverted": false
-        }
-    },
-    "border": {
-        "rounding": 10,
-        "thickness": 10
-    },
-    "dashboard": {
-        "enabled": true,
-        "dragThreshold": 50,
-        "mediaUpdateInterval": 500,
-        "showOnHover": true
-    },
-    "launcher": {
-        "actionPrefix": ">",
-        "dragThreshold": 50,
-    // ...existing code...
-        "enableDangerousActions": false,
-        "maxShown": 8,
-        "maxWallpapers": 9,
-        "specialPrefix": "@",
-        "useFuzzy": {
-            "apps": false,
-            "actions": false,
-            "schemes": false,
-            "variants": false,
-            "wallpapers": false
-        },
-        "showOnHover": false
-    },
-    "lock": {
-        "recolourLogo": false,
-        "enableFprint": true,
-        "showExtras": true,
-        "maxFprintTries": 3,
-        "sizes": {
-            "heightMult": 0.7,
-            "ratio": 1.7778,
-            "centerWidth": 600
-        }
-    },
-    "notifs": {
-        "actionOnClick": false,
-        "clearThreshold": 0.3,
-        "defaultExpireTimeout": 5000,
-        "expandThreshold": 20,
-        "openExpanded": false,
-        "expire": true
-    },
-    "osd": {
-        "enabled": true,
-        "enableBrightness": true,
-        "enableMicrophone": false,
-        "hideDelay": 2000
-    },
-    "paths": {
-        "mediaGif": "root:/assets/bongocat.gif",
-        "sessionGif": "root:/assets/kurukuru.gif",
-        "wallpaperDir": "~/Pictures/Wallpapers",
-        "wallpaper": "~/Pictures/Wallpapers/default.jpg"
-    },
-    "services": {
-        "audioIncrement": 0.1,
-        "maxVolume": 1.0,
-        "defaultPlayer": "Spotify",
-        "gpuType": "",
-        "playerAliases": [{ "from": "com.github.th_ch.youtube_music", "to": "YT Music" }],
-        "weatherLocation": "New York",
-        "useFahrenheit": false,
-        "useTwelveHourClock": true,
-        "smartScheme": true,
-        "visualiserBars": 45
-    },
-    "session": {
-        "dragThreshold": 30,
-        "enabled": true,
-        "vimKeybinds": false,
-        "commands": {
-            "logout": ["loginctl", "terminate-user", ""],
-            "shutdown": ["systemctl", "poweroff"],
-            "hibernate": ["systemctl", "hibernate"],
-            "reboot": ["systemctl", "reboot"]
-        }
-    },
-    "sidebar": {
-        "dragThreshold": 80,
-        "enabled": true
-    },
-    "utilities": {
-        "enabled": true,
-        "maxToasts": 4,
-        "toasts": {
-            "audioInputChanged": true,
-            "audioOutputChanged": true,
-            "capsLockChanged": true,
-            "chargingChanged": true,
-            "configLoaded": true,
-            "dndChanged": true,
-            "gameModeChanged": true,
-            "kbLayoutChanged": true,
-            "numLockChanged": true,
-            "vpnChanged": true,
-            "nowPlaying": false
-        },
-        "vpn": {
-            "enabled": false,
-            "provider": [
-                {
-                    "name": "wireguard",
-                    "interface": "your-connection-name",
-                    "displayName": "Wireguard (Your VPN)"
-                }
-            ]
-        }
-    }
-}
+示例 — 在 Niri `config.kdl` 中绑定：
 
+```kdl
+// 应用启动器
+Mod+Space { spawn-sh "qs -c caelestia ipc call drawers toggle launcher"; }
+
+// 剪贴板历史
+Mod+V { spawn-sh "qs -c caelestia ipc call clipboard open"; }
+
+// 锁屏
+Mod+L { spawn-sh "qs -c caelestia ipc call lock lock"; }
+
+// 区域截图
+Mod+Shift+S { spawn-sh "qs -c caelestia ipc call picker open"; }
+
+// OCR 文字识别
+Mod+Shift+X { spawn-sh "qs -c caelestia ipc call picker regionOcr"; }
+
+// Google Lens 图像搜索
+Mod+Shift+A { spawn-sh "qs -c caelestia ipc call picker regionSearch"; }
+
+// 电源菜单
+Ctrl+Alt+Delete { spawn-sh "qs -c caelestia ipc call drawers toggle session"; }
 ```
 
-</details>
+### 可用 IPC 命令
 
-<details><summary> <b> Example Nix Home Manager </b></summary>
+通过 `qs -c caelestia ipc show` 查看完整列表，主要包括：
 
-I don't have nix, plz help :D
-
-```nix
-{
-  programs.niri-caelestia-shell = {
-    enable = true;
-    with-cli = true;
-    settings.theme.accent = "#ffb86c";
-  };
-}
-```
-
-</details>
-
-### 🎭 PFP/Wallpapers
-The profile picture for the dashboard is read from the file `~/.face`, so to set
-it you can copy your image to there or set it via the dashboard. **It's not a directory.**
-
-The wallpapers for the wallpaper switcher are read from `~/Pictures/Wallpapers`
-by default. To change it, change the wallpapers path in `~/.config/niri_caelestia/shell.json`.
-
-To set the wallpaper, you can use the app launcher command `> wallpaper`.
-
+| 目标 | 功能 |
+|------|------|
+| `drawers` | 切换/列出各抽屉面板（launcher、session、dashboard 等） |
+| `picker` | 区域截图、OCR、Google Lens 搜索 |
+| `lock` | 锁屏/解锁 |
+| `clipboard` | 打开/切换/关闭剪贴板历史 |
+| `quicktoggles` | 打开/切换/关闭快捷开关面板 |
+| `controlCenter` | 打开控制中心 |
+| `mpris` | 媒体播放控制（播放/暂停/下一首/上一首） |
+| `notifs` | 清除通知 |
+| `brightness` | 获取/设置亮度 |
+| `wallpaper` | 获取/设置/列出壁纸 |
+| `toaster` | 发送 toast 通知（info/success/warn/error） |
+| `idleInhibitor` | 切换/启用/禁用空闲抑制 |
 
 ---
 
-## 🧪 Known Issues
+## ⚙️ 配置
 
-1. Task manager has no Intel GPU support (AMD/NVIDIA only)
-2. Focus grabbing for Quickshell windows behaves awkwardly due to Niri limitations
-3. Quickshell may occasionally crash due to upstream issues (auto-restarts)
+配置文件位于：
 
+```
+~/.config/quickshell/caelestia/shell.json
+```
+
+主要配置段：
+
+| 段 | 说明 |
+|-----|------|
+| `appearance` | 字体、动画、透明度、间距、圆角、内边距 |
+| `general` | 应用（终端、文件管理器、音频等）、电池警告、空闲超时 |
+| `background` | 壁纸、桌面时钟、音频可视化 |
+| `bar` | 顶部栏条目顺序、工作区、托盘、状态图标、弹出窗口 |
+| `border` | 窗口边框圆角/厚度 |
+| `dashboard` | 信息面板布局、性能图表 |
+| `launcher` | 启动器模式、模糊搜索、壁纸预览 |
+| `lock` | 锁屏指纹、尺寸、额外信息 |
+| `notifs` | 通知过期、展开、清除阈值 |
+| `osd` | 亮度/音量/麦克风 OSD |
+| `services` | 天气位置、音频增量、播放器别名、GPU 类型 |
+| `session` | 电源命令、Vim 快捷键 |
+| `utilities` | Toast 通知、VPN |
+
+详细示例配置见 [shell.json 示例](#)。
 
 ---
 
-## 🙏 Credits
+## 🎨 主题
 
-* [Quickshell](https://github.com/quickshell/quickshell) – Core shell framework
-* [Caelestia](https://github.com/caelestia-shell/caelestia-shell) – Original project
-* [Niri-Caelestia-Shell](https://github.com/jutraim/niri-caelestia-shell) – Niri adaptation this fork is based on
-* [end-4/dots-hyprland](https://github.com/end-4/dots-hyprland) – Many features and ideas inspired from
-* [Niri](https://github.com/YaLTeR/niri) – Window manager backend
-* All upstream contributors :)
+本 shell 支持 Material You 动态取色主题。详细设置指南见 [THEME.md](THEME.md)。
+
+### 头像设置
+
+仪表盘头像读取自 `~/.face`，可通过将此文件指向你的头像图片来设置。
+
+### 壁纸切换
+
+壁纸目录默认为 `~/Pictures/Wallpapers`，可在配置中修改。在启动器中使用 `> wallpaper` 命令切换壁纸。
 
 ---
 
-## 📈 Useless chart
+## 🧪 已知问题
 
-[![Star History Chart](https://api.star-history.com/svg?repos=Ayushkr2003/niri-caelestia-shell\&type=Date)](https://star-history.com/#Ayushkr2003/niri-caelestia-shell&Date)
+1. **Task Manager** 暂不支持 Intel GPU（仅 AMD/NVIDIA）
+2. **Dashboard** 下拉后在左右空白区域点击有时无法收起
+3. **QuickToggles → 设置** 无法正常跳转 ControlCenter
+4. 部分配置段存在冗余和混乱，后续会清理
+5. **Novel/Manga 阅读器后端** 需要额外编译 `extras/` 目录下的服务端（不影响核心功能）
+6. Quickshell 偶发崩溃（上游问题，会自动重启）
+
+详细问题列表见 [部分还存在的一些问题.md](部分还存在的一些问题.md)。
+
+---
+
+## 📁 项目结构
+
+```
+~/.config/quickshell/caelestia/
+├── shell.qml                    # 入口文件
+├── shell.json                   # 配置文件
+├── config/                      # 配置 QML 组件
+├── modules/                     # 核心模块
+│   ├── bar/                     # 顶部状态栏
+│   ├── launcher/                # 应用启动器
+│   ├── dashboard/               # 信息面板
+│   ├── controlcenter/           # 控制中心
+│   ├── lock/                    # 锁屏
+│   ├── notifications/           # 通知
+│   ├── osd/                     # 音量/亮度 OSD
+│   ├── session/                 # 电源菜单
+│   ├── quicktoggles/            # 快捷开关
+│   ├── areapicker/              # 区域选择（截图/OCR）
+│   └── background/              # 壁纸与背景
+├── services/                    # 后台服务（Niri IPC、音频、网络等）
+├── components/                  # UI 组件库
+├── plugin/src/Caelestia/        # C++ 原生 QML 插件
+├── scripts/                     # 辅助脚本
+├── dotfiles/                    # 可部署的配置文件
+├── images/                      # 截图
+└── assets/                      # 资源文件（logo、gif、emoji 等）
+```
+
+---
+
+## 🙏 鸣谢
+
+- [Quickshell](https://github.com/outfoxxed/quickshell) — 核心 Shell 框架
+- [Caelestia Shell](https://github.com/caelestia-dots/shell) — 原版项目
+- [jutraim/niri-caelestia-shell](https://github.com/jutraim/niri-caelestia-shell) — Niri 移植版
+- [AyushKr2003/niri-caelestia-shell](https://github.com/AyushKr2003/niri-caelestia-shell) — 上游分支
+- [end-4/dots-hyprland](https://github.com/end-4/dots-hyprland) — 功能与设计灵感
+- [Niri](https://github.com/YaLTeR/niri) — 窗口管理器
+
+---
+
+## 📄 许可
+
+GNU General Public License v3.0 — 详见 [LICENSE](LICENSE)。
