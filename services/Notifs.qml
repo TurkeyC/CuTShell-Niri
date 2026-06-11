@@ -413,6 +413,11 @@ Singleton {
 
     // ── Components ────────────────────────────────────────────────────────────
 
+    /** Strip HTML tags from a string. Notif body often arrives as HTML. */
+    function _stripHtml(text: string): string {
+        return text.replace(/<[^>]*>/g, "");
+    }
+
     /**
      * Notif — wrapper around a live or persisted notification.
      *
@@ -451,7 +456,7 @@ Singleton {
 
         readonly property string summary: notification?.summary ?? _savedSummary
         property string _savedSummary: ""
-        readonly property string body: notification?.body ?? _savedBody
+        readonly property string body: root._stripHtml(notification?.body ?? _savedBody)
         property string _savedBody: ""
         readonly property string appIcon: notification?.appIcon ?? _savedAppIcon
         property string _savedAppIcon: ""

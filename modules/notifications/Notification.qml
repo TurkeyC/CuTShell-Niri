@@ -19,9 +19,6 @@ StyledRect {
     readonly property bool hasAppIcon: modelData.appIcon.length > 0
     readonly property int nonAnimHeight: summary.implicitHeight + (root.expanded ? appName.height + body.height + actions.height + actions.anchors.topMargin : bodyPreview.height) + inner.anchors.margins * 2
     property bool expanded
-    function startDismiss(): void {
-        Notifs.discardNotification(root.modelData.notificationId);
-    }
 
     color: root.modelData.urgency === NotificationUrgency.Critical ? Colours.palette.m3secondaryContainer : Colours.tPalette.m3surfaceContainer
     radius: Appearance.rounding.normal
@@ -76,10 +73,15 @@ StyledRect {
             if (!containsMouse)
                 root.modelData.timer?.start();
 
-            if (Math.abs(root.x) < Config.notifs.sizes.width * Config.notifs.clearThreshold)
+            if (Math.abs(root.x) < Config.notifs.sizes.width * Config.notifs.clearThreshold) {
                 root.x = 0;
-            else
-                root.startDismiss();
+            } else if (root.x > 0) {
+                // 向右滑 → 隐藏弹窗，保留在通知列表
+                Notifs.timeoutNotification(root.modelData.notificationId);
+            } else {
+                // 向左滑 → 永久删除
+                Notifs.discardNotification(root.modelData.notificationId);
+            }
         }
         onPositionChanged: event => {
             if (pressed) {
@@ -467,7 +469,7 @@ StyledRect {
                         readonly property string text: qsTr("Close")
                         readonly property string identifier: ""
                         function invoke(): void {
-                            Notifs.discardNotification(root.modelData.notificationId);
+                            Notifs.timeoutNotification(root.modelData.notificationId);
                         }
                     }
                 }
