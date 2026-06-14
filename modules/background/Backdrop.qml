@@ -9,107 +9,88 @@ import QtQuick.Effects
 import Quickshell
 import Quickshell.Wayland
 
-Variants {
-    id: root
-    model: Quickshell.screens
+Loader {
+    active: Config.background.backdrop.enabled
 
-    PanelWindow {
-        id: backdropWindow
-        required property var modelData
+    sourceComponent: Variants {
+        id: root
+        model: Quickshell.screens
 
-        screen: modelData
+        PanelWindow {
+            id: backdropWindow
+            required property var modelData
 
-        WlrLayershell.layer: WlrLayer.Background
-        WlrLayershell.namespace: "quickshell:Backdrop"
-        WlrLayershell.exclusionMode: ExclusionMode.Ignore
+            screen: modelData
 
-        anchors.top: true
-        anchors.bottom: true
-        anchors.left: true
-        anchors.right: true
+            WlrLayershell.layer: WlrLayer.Background
+            WlrLayershell.namespace: "quickshell:Backdrop"
+            WlrLayershell.exclusionMode: ExclusionMode.Ignore
 
-        color: "transparent"
+            anchors.top: true
+            anchors.bottom: true
+            anchors.left: true
+            anchors.right: true
 
-        Connections {
-            target: Wallpapers
-            function onFrameReady(path): void {
-                if (path === Wallpapers.current) {
-                    console.log("Backdrop: frame ready, force-updating source");
-                    const old = bgImage.source;
-                    bgImage.source = "";
-                    bgImage.source = old;
-                }
-            }
-        }
-
-        // Use the same wallpaper source as the main background
-        readonly property string wallpaperSource: {
-            const path = Wallpapers.current;
-            if (!path) return "";
-            
-            const source = Wallpapers.getColorSource(path);
-            // Ensure file:// prefix for local paths
-            if (source.toString().startsWith("/")) return "file://" + source;
-            return source;
-        }
-
-        // Rectangle {
-        //     anchors.fill: parent
-        //     color: "black"
-        // }
-        // 原本的 Backdrop.qml 中改为：
-        Rectangle {
-            anchors.fill: parent
             color: "transparent"
-        }
 
-        // Rectangle {
-        //     anchors.fill: parent
-        //     color: Colours.palette.m3background
-        //     opacity: Colours.transparency.enabled ? 0.8 : 1
-        // }
-
-        Image {
-            id: bgImage
-            anchors.fill: parent
-            fillMode: Image.PreserveAspectCrop
-            source: {
-                const src = backdropWindow.wallpaperSource;
-                if (!src) return "";
-                // If it's a local file (file://), check if it exists before trying to load
-                if (src.startsWith("file://")) {
-                    const localPath = src.substring(7);
-                    if (!CUtils.exists(localPath)) return "";
+            Connections {
+                target: Wallpapers
+                function onFrameReady(path): void {
+                    if (path === Wallpapers.current) {
+                        const old = bgImage.source;
+                        bgImage.source = "";
+                        bgImage.source = old;
+                    }
                 }
-                return src;
             }
 
-            // RAM Optimization: Scale down significantly before blurring.
-            // Since the image is blurred by 0.8 (heavy), we don't need full resolution.
-            sourceSize.width: backdropWindow.width / 4
-            sourceSize.height: backdropWindow.height / 4
-
-            asynchronous: true
-            cache: true
-            smooth: true
-
-            opacity: status === Image.Ready ? 1 : 0
-            Behavior on opacity { Anim {} }
-
-            layer.enabled: status === Image.Ready
-            layer.effect: MultiEffect {
-                autoPaddingEnabled: false
-                blurEnabled: true
-                blur: 0.8
-                blurMax: 64
+            readonly property string wallpaperSource: {
+                const path = Wallpapers.current;
+                if (!path) return "";
+                const source = Wallpapers.getColorSource(path);
+                if (source.toString().startsWith("/")) return "file://" + source;
+                return source;
             }
-        }
 
-        // Tint overlay (on top of blurred image)
-        Rectangle {
-            anchors.fill: parent
-            color: Colours.palette.m3surface
-            opacity: 0.15
+            Image {
+                id: bgImage
+                anchors.fill: parent
+                fillMode: Image.PreserveAspectCrop
+                source: {
+                    const src = backdropWindow.wallpaperSource;
+                    if (!src) return "";
+                    if (src.startsWith("file://")) {
+                        const localPath = src.substring(7);
+                        if (!CUtils.exists(localPath)) return "";
+                    }
+                    return src;
+                }
+
+                sourceSize.width: backdropWindow.width / 4
+                sourceSize.height: backdropWindow.height / 4
+
+                asynchronous: true
+                cache: true
+                smooth: true
+
+                opacity: status === Image.Ready ? 1 : 0
+                Behavior on opacity { Anim {} }
+
+                layer.enabled: status === Image.Ready && Config.background.backdrop.blurEnabled
+                layer.effect: MultiEffect {
+                    autoPaddingEnabled: false
+                    blurEnabled: true
+                    blur: Config.background.backdrop.blur
+                    blurMax: 64
+                }
+            }
+
+            Rectangle {
+                anchors.fill: parent
+                visible: Config.background.backdrop.tintEnabled
+                color: Colours.palette.m3surface
+                opacity: Config.background.backdrop.tintOpacity
+            }
         }
     }
 }

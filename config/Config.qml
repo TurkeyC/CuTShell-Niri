@@ -149,6 +149,13 @@ Singleton {
         return {
             enabled: background.enabled,
             wallpaperEnabled: background.wallpaperEnabled,
+            backdrop: {
+                enabled: background.backdrop.enabled,
+                tintEnabled: background.backdrop.tintEnabled,
+                tintOpacity: background.backdrop.tintOpacity,
+                blurEnabled: background.backdrop.blurEnabled,
+                blur: background.backdrop.blur
+            },
             desktopClock: {
                 enabled: background.desktopClock.enabled,
                 scale: background.desktopClock.scale,

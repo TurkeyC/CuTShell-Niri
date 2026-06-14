@@ -42,6 +42,90 @@ CollapsibleSection {
 
     StyledText {
         Layout.topMargin: Appearance.spacing.lg
+        text: qsTr("Backdrop")
+        font.pointSize: Appearance.font.size.bodyLarge
+        font.weight: 500
+    }
+
+    SwitchRow {
+        label: qsTr("Backdrop enabled")
+        checked: rootPane.backdropEnabled
+        onToggled: checked => {
+            rootPane.backdropEnabled = checked;
+            rootPane.saveConfig();
+        }
+    }
+
+    SwitchRow {
+        label: qsTr("Tint overlay")
+        checked: rootPane.backdropTintEnabled
+        onToggled: checked => {
+            rootPane.backdropTintEnabled = checked;
+            rootPane.saveConfig();
+        }
+    }
+
+    SectionContainer {
+        contentSpacing: Appearance.spacing.lg
+
+        SliderInput {
+            Layout.fillWidth: true
+
+            label: qsTr("Tint opacity")
+            value: rootPane.backdropTintOpacity * 100
+            from: 0
+            to: 100
+            suffix: "%"
+            validator: IntValidator {
+                bottom: 0
+                top: 100
+            }
+            formatValueFunction: val => Math.round(val).toString()
+            parseValueFunction: text => parseInt(text)
+
+            onValueModified: newValue => {
+                rootPane.backdropTintOpacity = newValue / 100;
+                rootPane.saveConfig();
+            }
+        }
+    }
+
+    SwitchRow {
+        label: qsTr("Blur enabled")
+        checked: rootPane.backdropBlurEnabled
+        onToggled: checked => {
+            rootPane.backdropBlurEnabled = checked;
+            rootPane.saveConfig();
+        }
+    }
+
+    SectionContainer {
+        contentSpacing: Appearance.spacing.lg
+
+        SliderInput {
+            Layout.fillWidth: true
+
+            label: qsTr("Blur amount")
+            value: rootPane.backdropBlur * 100
+            from: 0
+            to: 100
+            suffix: "%"
+            validator: IntValidator {
+                bottom: 0
+                top: 100
+            }
+            formatValueFunction: val => Math.round(val).toString()
+            parseValueFunction: text => parseInt(text)
+
+            onValueModified: newValue => {
+                rootPane.backdropBlur = newValue / 100;
+                rootPane.saveConfig();
+            }
+        }
+    }
+
+    StyledText {
+        Layout.topMargin: Appearance.spacing.lg
         text: qsTr("Desktop Clock")
         font.pointSize: Appearance.font.size.bodyLarge
         font.weight: 500
