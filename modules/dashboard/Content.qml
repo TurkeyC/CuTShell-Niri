@@ -137,6 +137,10 @@ Item {
                     Pane {
                         sourceComponent: Performance {}
                     }
+
+                    Pane {
+                        sourceComponent: UsagePanel {}
+                    }
                 }
 
                 Behavior on contentX {

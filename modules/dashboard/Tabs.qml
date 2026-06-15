@@ -44,6 +44,11 @@ Item {
             iconName: "speed"
             text: qsTr("System")
         }
+
+        Tab {
+            iconName: "bar_chart_4_bars"
+            text: qsTr("Usage")
+        }
     }
 
     Item {
