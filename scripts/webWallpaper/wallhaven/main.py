@@ -37,7 +37,7 @@ from wallhaven.utils.config  import Config
 from wallhaven.utils.formatter import fmt_detail, print_results, Progress, C
 
 # Cache directory for thumbnails to avoid hotlinking issues in QML
-CACHE_DIR = os.path.expanduser("~/.cache/caelestia/web_wallpapers/thumbs")
+CACHE_DIR = os.path.expanduser("~/.cache/Celestia/Shell/web_wallpapers/thumbs")
 
 def cache_thumbnail(wallpaper_dict):
     """Download thumbnail to local cache and return local path."""

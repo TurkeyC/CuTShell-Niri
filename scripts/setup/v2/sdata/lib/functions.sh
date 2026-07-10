@@ -1,4 +1,4 @@
-# Common functions for niri-caelestia-shell installer
+# Common functions for Celestia-Shell installer
 function try { "$@" || sleep 0; }
 function v(){
   echo -e "${STY_CYAN}[next]: $*${STY_RST}"

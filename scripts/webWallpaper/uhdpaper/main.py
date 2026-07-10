@@ -1,4 +1,4 @@
-#!/usr/bin/env -S\_/bin/sh\_-c\_"source\_\$(eval\_echo\_\$CAELESTIA_VIRTUAL_ENV)/bin/activate&&exec\_python\_-E\_"\$0"\_"\$@""
+#!/usr/bin/env -S\_/bin/sh\_-c\_"source\_\$(eval\_echo\_\$CELESTIA_VIRTUAL_ENV)/bin/activate&&exec\_python\_-E\_"\$0"\_"\$@""
 """
 uhdpaper-dl — Random UHD wallpaper downloader from uhdpaper.com
 ================================================================
@@ -34,7 +34,7 @@ from scraper import (
 from downloader import download_best_wallpaper
 
 # Cache directory for thumbnails to avoid hotlinking issues in QML
-CACHE_DIR = os.path.expanduser("~/.cache/caelestia/web_wallpapers/thumbs")
+CACHE_DIR = os.path.expanduser("~/.cache/Celestia/Shell/web_wallpapers/thumbs")
 
 def cache_thumbnail(wallpaper):
     """Download thumbnail to local cache and return local path."""

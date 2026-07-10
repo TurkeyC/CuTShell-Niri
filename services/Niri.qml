@@ -3,8 +3,8 @@ pragma ComponentBehavior: Bound
 
 import QtQuick
 import Quickshell
-import Caelestia
-import Caelestia.Internal
+import Celestia
+import Celestia.Internal
 import qs.config
 import qs.services
 import qs.utils

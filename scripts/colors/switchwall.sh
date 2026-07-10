@@ -103,7 +103,7 @@ post_process() {
     "$SCRIPT_DIR/code/material-code-set-color.sh" &
 
     # Sync SDDM if shell-integrate was chosen
-    local sddm_sync="$HOME/.config/niri-caelestia-sddm/shell-sync.sh"
+    local sddm_sync="$HOME/.config/niri-celestia-sddm/shell-sync.sh"
     if [[ -f "$sddm_sync" ]]; then
         echo "[switchwall] Triggering SDDM color sync..."
         bash "$sddm_sync"

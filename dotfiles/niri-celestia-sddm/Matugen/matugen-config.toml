@@ -1,0 +1,7 @@
+# Add this block to ~/.config/matugen/config.toml
+# It hooks into your existing Celestia coloring pipeline
+
+[templates.niri-celestia-sddm]
+input_path  = '~/.config/niri-celestia-sddm/SddmColors.qml'
+output_path = '~/.config/niri-celestia-sddm/Colors.qml'
+post_hook   = 'sudo ~/.config/niri-celestia-sddm/sddm-theme-apply.sh &'

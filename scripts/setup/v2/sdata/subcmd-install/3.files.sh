@@ -1,4 +1,4 @@
-# Config file installation for niri-caelestia-shell
+# Config file installation for Celestia-Shell
 echo -e "${STY_CYAN}Deploying configuration files and building the shell...${STY_RST}"
 
 # 1. Perform Safety Backup
@@ -9,7 +9,7 @@ backup_clashing_configs "$REPO_ROOT/dotfiles/.config" "$XDG_CONFIG_HOME" "$BACKU
 
 # 2. Ensure Target Directories
 mkdir -p "$XDG_CONFIG_HOME/niri"
-mkdir -p "$XDG_CONFIG_HOME/quickshell/niri-caelestia-shell"
+mkdir -p "$XDG_CONFIG_HOME/quickshell/Celestia-Shell"
 mkdir -p "$XDG_CONFIG_HOME/Kvantum"
 mkdir -p "$XDG_STATE_HOME/quickshell/user/generated/terminal"
 mkdir -p "$XDG_STATE_HOME/quickshell/user/generated/wallpaper"
@@ -17,7 +17,7 @@ mkdir -p "$HOME/Pictures/Wallpapers"
 
 # 3. Install & Build Shell Code
 echo -e "${STY_BLUE}Building and installing shell...${STY_RST}"
-TARGET_DIR="$XDG_CONFIG_HOME/quickshell/niri-caelestia-shell"
+TARGET_DIR="$XDG_CONFIG_HOME/quickshell/Celestia-Shell"
 
 # Copy local repository files to target directory
 cp -rf "$REPO_ROOT"/* "$TARGET_DIR/"

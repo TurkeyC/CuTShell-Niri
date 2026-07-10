@@ -18,13 +18,16 @@
 ## 📜 分支谱系
 
 ```
-caelestia-dots/shell                    ← Caelestia 原版（Hyprland）
+caelestia-dots/shell                    ← Celestia 原版（Hyprland）
   └─ jutraim/niri-caelestia-shell       ← 移植到 Niri 窗口管理器
        └─ AyushKr2003/niri-caelestia-shell  ← 增强功能、添加配置编辑器等
             └─ TurkeyC/CuTShell-Niri    ← 🎯 本仓库：深度定制与 Fedora 适配
 ```
 
-本项目是 [AyushKr2003/niri-caelestia-shell](https://github.com/AyushKr2003/niri-caelestia-shell) 的个人深度定制分支，而上游依次继承自 [jutraim 的 Niri 移植版](https://github.com/jutraim/niri-caelestia-shell) 和 [Caelestia Shell 原版](https://github.com/caelestia-dots/shell)。
+本项目是 [AyushKr2003/niri-caelestia-shell](https://github.com/AyushKr2003/niri-caelestia-shell) 的个人深度定制分支，而上游依次继承自 [jutraim 的 Niri 移植版](https://github.com/jutraim/niri-caelestia-shell) 和 [Celestia Shell 原版](https://github.com/caelestia-dots/shell)。
+
+> [!NOTE]
+> 原项目名为 `Caelestia`（拼写错误），本仓库已全面修正为 `Celestia`。
 
 ---
 
@@ -48,7 +51,7 @@ caelestia-dots/shell                    ← Caelestia 原版（Hyprland）
 - **System Monitor（系统监视器）** — Dashboard 中的实时性能图表
 
 ### ⚙️ 配置与适配
-- **配置路径变更** — 从 `~/.config/niri_caelestia/` 迁移至 `~/.config/quickshell/caelestia/`，统一管理
+- **配置路径统一** — 所有运行时数据位于 `~/.local/*/Celestia/Shell/`，shell 入口为 `~/.config/quickshell/Celestia-Shell/`
 - **Fedora 43 适配** — 完整的 Fedora COPR 安装指南与依赖列表
 - **中文文档** — 安装指南、已知问题、配置说明全部中文化
 
@@ -128,96 +131,119 @@ sudo chmod +x /usr/local/bin/app2unit
 ```
 
 > [!NOTE]
-> 与 Caelestia 原版不同，[`caelestia-cli`](https://github.com/caelestia-dots/cli) **不是本项目的运行时依赖**。
+> 与 Celestia 原版不同，[`caelestia-cli`](https://github.com/caelestia-dots/cli) **不是本项目的运行时依赖**。
 
 ---
 
 ## ⚡ 安装
 
-### 前置条件
+本项目采用**自包含目录**部署方式：编译产物为一个可移动目录，不安装到系统路径（`/usr/`、`/etc/`），复制即用、删除即卸。
 
-确保已安装 Niri 窗口管理器，并已配置好 `~/.config/niri/config.kdl`。
+### 方案 A：容器开发（推荐）
 
-### 1. 克隆仓库
+使用 Distrobox 容器隔离构建环境，宿主机只需运行时库。
 
+**宿主机准备：**
 ```bash
-mkdir -p ~/.config/quickshell
-cd ~/.config/quickshell
-git clone https://github.com/TurkeyC/CuTShell-Niri caelestia
+sudo dnf install distrobox podman
 ```
 
-### 2. 安装依赖
-
-**Arch Linux：**
+**创建开发容器：**
 ```bash
-sudo pacman -S cmake ninja qt6-declarative qt6-qtmultimedia qt6-qtsvg \
-  glibc gcc-libs networkmanager networkmanager-qt pipewire aubio \
-  libqalculate grim swappy tesseract tesseract-data-eng wl-clipboard \
-  curl ddcutil brightnessctl fish glibc
-# AUR
-yay -S quickshell-git ttf-material-icons-git ttf-jetbrains-mono cliphist cava
-pip install materialyoucolor
+distrobox create --name celestia-dev --image fedora:44 \
+  --volume ~/.config/quickshell/Celestia:/home/$USER/.config/quickshell/Celestia
+distrobox enter celestia-dev
 ```
 
-**Fedora 43+：**
+**容器内安装构建依赖：**
 ```bash
-# 先通过 COPR 安装 quickshell
-sudo dnf install material-symbols-fonts matugen cliphist wl-clipboard grim \
-  tesseract brightnessctl ddcutil libnotify NetworkManager xdg-utils cava \
-  papirus-icon-theme fish
-sudo dnf install cmake gcc-c++ qt6-qtbase-devel qt6-qtdeclarative-devel \
-  qt6-qtmultimedia-devel qt6-qtsvg-devel pipewire-devel aubio-devel \
-  libqalculate-devel
+sudo dnf install cmake ninja-build gcc-c++ \
+  qt6-qtbase-devel qt6-qtdeclarative-devel \
+  qt6-qtmultimedia-devel qt6-qtsvg-devel \
+  pipewire-devel aubio-devel libqalculate-devel \
+  quickshell gdb
 ```
 
-### 3. 构建与安装
-
+**构建：**
 ```bash
-cd ~/.config/quickshell/caelestia
+cd ~/.config/quickshell/Celestia
 
-# 配置
-cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
+cmake -S . -B build -G Ninja \
+  -DCMAKE_INSTALL_PREFIX=$PWD/build/celestia \
+  -DINSTALL_QMLDIR="qml" \
+  -DINSTALL_QSCONFDIR="." \
+  -DINSTALL_LIBDIR="lib" \
+  -DCMAKE_BUILD_TYPE=Debug
 
-# 编译
 cmake --build build -j$(nproc)
-
-# 安装（Arch Linux）
-sudo cmake --install build --prefix /
-
-# 安装（Fedora — 注意 QML 路径不同！）
-cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DINSTALL_QMLDIR="usr/lib64/qt6/qml"
-sudo cmake --install build --prefix /
+cmake --install build
 ```
 
-> [!IMPORTANT]
-> Fedora 的 Qt6 QML 路径是 `/usr/lib64/qt6/qml/`，而不是 `/usr/lib/qt6/qml/`。不指定正确的路径会导致 QML 引擎加载到系统自带的旧版 Caelestia 插件，缺少 `CachingImageManager` 等自定义类型。
-
-### 4. 运行 setup 脚本
-
+**部署到宿主机：**
 ```bash
-./scripts/setup/setup.sh
+# 在宿主机安装运行时库（只需一次）
+sudo dnf install aubio
+
+# 复制产物到目标位置
+cp -r build/celestia ~/.config/quickshell/Celestia-Shell
+
+# 启动
+QML2_IMPORT_PATH=~/.config/quickshell/Celestia-Shell/qml qs -c Celestia-Shell
 ```
 
-支持参数：`--skip-deps`、`--skip-python`、`--skip-services`
-
-### 5. 部署 dotfiles（可选）
-
+日常开发循环：
 ```bash
-cp -r dotfiles/.config/* ~/.config/
+distrobox enter celestia-dev
+cd ~/.config/quickshell/Celestia
+cmake --build build -j$(nproc) && cmake --install build
+# 容器内测试
+QML2_IMPORT_PATH=$PWD/build/celestia/qml qs -c $PWD/build/celestia
+# 确认无误后复制到宿主机
+cp -r build/celestia ~/.config/quickshell/Celestia-Shell
 ```
 
-> 复制 `matugen` 文件夹到 `~/.config/` 是壁纸动态取色功能的**必要条件**。
+详细开发流程见 [celestia-dev-workflow.md](celestia-dev-workflow.md) 和 [在distrobox中进行的可迁移自包含开发.md](在distrobox中进行的可迁移自包含开发.md)。
 
-### 6. 启动 Shell
+### 方案 B：在宿主机直接编译
+
+宿主机需要安装完整的构建依赖和运行时库：
+
+**Fedora 44+：**
+```bash
+# 构建依赖
+sudo dnf install cmake ninja-build gcc-c++ \
+  qt6-qtbase-devel qt6-qtdeclarative-devel \
+  qt6-qtmultimedia-devel qt6-qtsvg-devel \
+  pipewire-devel aubio-devel libqalculate-devel
+
+# 运行时库
+sudo dnf install aubio libqalculate pipewire-libs
+
+# 构建
+cd ~/.config/quickshell/Celestia
+cmake -S . -B build -G Ninja \
+  -DCMAKE_INSTALL_PREFIX=$PWD/build/celestia \
+  -DINSTALL_QMLDIR="qml" \
+  -DINSTALL_QSCONFDIR="." \
+  -DINSTALL_LIBDIR="lib" \
+  -DCMAKE_BUILD_TYPE=Debug
+cmake --build build -j$(nproc)
+cmake --install build
+
+# 部署
+cp -r build/celestia ~/.config/quickshell/Celestia-Shell
+```
+
+### 启动 Shell
 
 ```bash
-quickshell --config caelestia
+QML2_IMPORT_PATH=~/.config/quickshell/Celestia-Shell/qml qs -c Celestia-Shell
 ```
 
 在 Niri 配置中设置为自启动：
 
 ```kdl
-spawn-at-startup "quickshell" "-c" "caelestia" "-n"
+spawn-at-startup "sh" "-c" "QML2_IMPORT_PATH=$HOME/.config/quickshell/Celestia-Shell/qml qs -c Celestia-Shell"
 ```
 
 ---
@@ -226,36 +252,36 @@ spawn-at-startup "quickshell" "-c" "caelestia" "-n"
 
 ### IPC 快捷键
 
-所有 IPC 命令通过 `quickshell -c caelestia ipc call ...` 调用。
+所有 IPC 命令通过 `quickshell -c Celestia-Shell ipc call ...` 调用。
 
 示例 — 在 Niri `config.kdl` 中绑定：
 
 ```kdl
 // 应用启动器
-Mod+Space { spawn-sh "qs -c caelestia ipc call drawers toggle launcher"; }
+Mod+Space { spawn-sh "qs -c Celestia-Shell ipc call drawers toggle launcher"; }
 
 // 剪贴板历史
-Mod+V { spawn-sh "qs -c caelestia ipc call clipboard open"; }
+Mod+V { spawn-sh "qs -c Celestia-Shell ipc call clipboard open"; }
 
 // 锁屏
-Mod+L { spawn-sh "qs -c caelestia ipc call lock lock"; }
+Mod+L { spawn-sh "qs -c Celestia-Shell ipc call lock lock"; }
 
 // 区域截图
-Mod+Shift+S { spawn-sh "qs -c caelestia ipc call picker open"; }
+Mod+Shift+S { spawn-sh "qs -c Celestia-Shell ipc call picker open"; }
 
 // OCR 文字识别
-Mod+Shift+X { spawn-sh "qs -c caelestia ipc call picker regionOcr"; }
+Mod+Shift+X { spawn-sh "qs -c Celestia-Shell ipc call picker regionOcr"; }
 
 // Google Lens 图像搜索
-Mod+Shift+A { spawn-sh "qs -c caelestia ipc call picker regionSearch"; }
+Mod+Shift+A { spawn-sh "qs -c Celestia-Shell ipc call picker regionSearch"; }
 
 // 电源菜单
-Ctrl+Alt+Delete { spawn-sh "qs -c caelestia ipc call drawers toggle session"; }
+Ctrl+Alt+Delete { spawn-sh "qs -c Celestia-Shell ipc call drawers toggle session"; }
 ```
 
 ### 可用 IPC 命令
 
-通过 `qs -c caelestia ipc show` 查看完整列表，主要包括：
+通过 `qs -c Celestia-Shell ipc show` 查看完整列表，主要包括：
 
 | 目标 | 功能 |
 |------|------|
@@ -279,7 +305,7 @@ Ctrl+Alt+Delete { spawn-sh "qs -c caelestia ipc call drawers toggle session"; }
 配置文件位于：
 
 ```
-~/.config/quickshell/caelestia/shell.json
+~/.config/Celestia/Shell/shell.json
 ```
 
 主要配置段：
@@ -333,30 +359,47 @@ Ctrl+Alt+Delete { spawn-sh "qs -c caelestia ipc call drawers toggle session"; }
 
 ## 📁 项目结构
 
+### 源码目录（git 仓库）
+
 ```
-~/.config/quickshell/caelestia/
-├── shell.qml                    # 入口文件
-├── shell.json                   # 配置文件
-├── config/                      # 配置 QML 组件
-├── modules/                     # 核心模块
-│   ├── bar/                     # 顶部状态栏
-│   ├── launcher/                # 应用启动器
-│   ├── dashboard/               # 信息面板
-│   ├── controlcenter/           # 控制中心
-│   ├── lock/                    # 锁屏
-│   ├── notifications/           # 通知
-│   ├── osd/                     # 音量/亮度 OSD
-│   ├── session/                 # 电源菜单
-│   ├── quicktoggles/            # 快捷开关
-│   ├── areapicker/              # 区域选择（截图/OCR）
-│   └── background/              # 壁纸与背景
-├── services/                    # 后台服务（Niri IPC、音频、网络等）
-├── components/                  # UI 组件库
-├── plugin/src/Caelestia/        # C++ 原生 QML 插件
-├── scripts/                     # 辅助脚本
-├── dotfiles/                    # 可部署的配置文件
-├── images/                      # 截图
-└── assets/                      # 资源文件（logo、gif、emoji 等）
+~/.config/quickshell/Celestia/
+├── CMakeLists.txt                # CMake 构建配置
+├── shell.qml                     # Shell 入口文件
+├── shell.json                    # 默认配置
+├── plugin/src/Celestia/          # C++ 原生 QML 插件（4 个模块）
+│   ├── Internal/                 # Celestia.Internal（Niri IPC、缓存等）
+│   ├── Models/                   # Celestia.Models（文件系统模型）
+│   └── Services/                 # Celestia.Services（音频、系统监控等）
+├── config/                       # 配置 QML 组件
+├── modules/                      # 核心模块（bar、launcher、lock 等）
+├── services/                     # 后台服务（Niri IPC、音频、网络等）
+├── components/                   # UI 组件库
+├── utils/                        # 工具函数
+├── assets/                       # 资源文件
+├── scripts/                      # 辅助脚本（颜色、壁纸、安装等）
+├── dotfiles/                     # 可部署的配置文件
+├── images/                       # 截图
+├── build/celestia/               # 自包含编译产物（gitignored）
+└── 在distrobox中进行的可迁移自包含开发.md
+```
+
+### 部署后的自包含目录
+
+```
+~/.config/quickshell/Celestia-Shell/  ← 复制 build/celestia/ 到此
+├── qml/Celestia/                 # C++ QML 插件（.so 文件）
+├── shell.qml                     # 入口文件
+├── config/ components/ modules/ services/ utils/ assets/
+└── lib/version                   # 版本工具
+```
+
+### 运行时数据路径
+
+```
+~/.config/Celestia/Shell/shell.json          # 用户配置（运行时生成）
+~/.local/state/Celestia/Shell/               # 运行状态（配色、壁纸等）
+~/.local/share/Celestia/Shell/app_usage.db   # 应用使用统计
+~/.cache/Celestia/Shell/                     # 缓存
 ```
 
 ---
@@ -364,7 +407,7 @@ Ctrl+Alt+Delete { spawn-sh "qs -c caelestia ipc call drawers toggle session"; }
 ## 🙏 鸣谢
 
 - [Quickshell](https://github.com/outfoxxed/quickshell) — 核心 Shell 框架
-- [Caelestia Shell](https://github.com/caelestia-dots/shell) — 原版项目
+- [Celestia Shell](https://github.com/caelestia-dots/shell) — 原版项目
 - [jutraim/niri-caelestia-shell](https://github.com/jutraim/niri-caelestia-shell) — Niri 移植版
 - [AyushKr2003/niri-caelestia-shell](https://github.com/AyushKr2003/niri-caelestia-shell) — 上游分支
 - [end-4/dots-hyprland](https://github.com/end-4/dots-hyprland) — 功能与设计灵感

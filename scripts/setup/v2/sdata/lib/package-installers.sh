@@ -1,4 +1,4 @@
-# Package installers for niri-caelestia-shell
+# Package installers for Celestia-Shell
 install-python-packages(){
   echo -e "${STY_CYAN}Setting up Python 3.12 virtual environment...${STY_RST}"
   
@@ -14,7 +14,7 @@ install-python-packages(){
   mkdir -p "$VENV_DIR"
 
   # Create venv with specific version and prompt
-  v uv venv --prompt caelestia "$VENV_DIR" -p 3.12
+  v uv venv --prompt celestia "$VENV_DIR" -p 3.12
   
   # Install dependencies using the new requirements location
   source "$VENV_DIR/bin/activate"

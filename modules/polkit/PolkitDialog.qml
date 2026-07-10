@@ -12,7 +12,7 @@ import Quickshell
 import Quickshell.Wayland
 
 /**
- * PolkitDialog — authentication prompt overlay for niri-caelestia-shell.
+ * PolkitDialog — authentication prompt overlay for Celestia-Shell.
  *
  * Shown as a full-screen layer-shell surface on the Overlay layer whenever
  * PolkitService.active is true.  The card design mirrors the lock screen's
@@ -29,7 +29,7 @@ Variants {
         screen: modelData
 
         WlrLayershell.layer: WlrLayer.Overlay
-        WlrLayershell.namespace: "caelestia-polkit"
+        WlrLayershell.namespace: "Celestia-polkit"
         WlrLayershell.keyboardFocus: PolkitService.active ? WlrKeyboardFocus.Exclusive : WlrKeyboardFocus.None
         WlrLayershell.exclusionMode: ExclusionMode.Ignore
 

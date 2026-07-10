@@ -1,4 +1,4 @@
-# SDDM Setup for niri-caelestia-shell
+# SDDM Setup for Celestia-Shell
 echo -e "${STY_CYAN}Stage 4: SDDM Login Theme Setup${STY_RST}"
 
 if [[ "$ask" != "false" ]]; then
@@ -40,9 +40,9 @@ echo -e "${STY_BLUE}Enabling SDDM service...${STY_RST}"
 v sudo systemctl enable sddm
 
 # 3. Run the theme setup script with automated input
-SDDM_THEME_SRC="$REPO_ROOT/dotfiles/niri-caelestia-sddm"
+SDDM_THEME_SRC="$REPO_ROOT/dotfiles/niri-celestia-sddm"
 if [[ -d "$SDDM_THEME_SRC" ]]; then
-    echo -e "${STY_BLUE}Configuring niri-caelestia-sddm theme...${STY_RST}"
+    echo -e "${STY_BLUE}Configuring niri-celestia-sddm theme...${STY_RST}"
     
     # We navigate to the theme source and run its setup.
     # We pipe "1" to automatically select "Shell Integrate" mode.

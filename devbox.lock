@@ -1,0 +1,94 @@
+{
+  "lockfile_version": "1",
+  "packages": {
+    "github:NixOS/nixpkgs/nixpkgs-unstable": {
+      "last_modified": "2026-07-05T19:27:47Z",
+      "resolved": "github:NixOS/nixpkgs/f205b5574fd0cb7da5b702a2da51507b7f4fdd1b?lastModified=1783279667&narHash=sha256-%2FNAkDSsve%2BGNM0Bt6tleJdCGfsTlK89nPjkVOzZMo0s%3D"
+    },
+    "rustc@1.90.0": {
+      "last_modified": "2025-11-15T07:28:48Z",
+      "plugin_version": "0.0.1",
+      "resolved": "github:NixOS/nixpkgs/1d4c88323ac36805d09657d13a5273aea1b34f0c#rustc",
+      "source": "devbox-search",
+      "version": "1.90.0",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/58qfkg2idgx439l4mwxrd0hdxvrpqk0r-rustc-wrapper-1.90.0",
+              "default": true
+            },
+            {
+              "name": "man",
+              "path": "/nix/store/l7c5k4jhc2f32qz7kqazn5256h91a6hq-rustc-wrapper-1.90.0-man",
+              "default": true
+            },
+            {
+              "name": "doc",
+              "path": "/nix/store/sgsshw539sglkwdj3lv7j1zxlbygix34-rustc-wrapper-1.90.0-doc"
+            }
+          ],
+          "store_path": "/nix/store/58qfkg2idgx439l4mwxrd0hdxvrpqk0r-rustc-wrapper-1.90.0"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/isrqgq44fk5bml102r9dksq0hlw8vz2x-rustc-wrapper-1.90.0",
+              "default": true
+            },
+            {
+              "name": "man",
+              "path": "/nix/store/p04p6577dnnbk9vi34zkykk9bacgvybk-rustc-wrapper-1.90.0-man",
+              "default": true
+            },
+            {
+              "name": "doc",
+              "path": "/nix/store/4n5ai0fs0qy7fpnky4765z64443lavxa-rustc-wrapper-1.90.0-doc"
+            }
+          ],
+          "store_path": "/nix/store/isrqgq44fk5bml102r9dksq0hlw8vz2x-rustc-wrapper-1.90.0"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/bd6iijkw5j89f7fl5zll41j4cwghb897-rustc-wrapper-1.90.0",
+              "default": true
+            },
+            {
+              "name": "man",
+              "path": "/nix/store/7f0vim92lw2p5dw0jfh2ghrklykh0x06-rustc-wrapper-1.90.0-man",
+              "default": true
+            },
+            {
+              "name": "doc",
+              "path": "/nix/store/1vqy5n7m358i8zzld91f1lhbz8922gb1-rustc-wrapper-1.90.0-doc"
+            }
+          ],
+          "store_path": "/nix/store/bd6iijkw5j89f7fl5zll41j4cwghb897-rustc-wrapper-1.90.0"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/pw6j8mfpz3j9jf5vmxcn5q2b55s6ifri-rustc-wrapper-1.90.0",
+              "default": true
+            },
+            {
+              "name": "man",
+              "path": "/nix/store/qkxvqxnprbhmgsljy2v6sbcz6yzb376c-rustc-wrapper-1.90.0-man",
+              "default": true
+            },
+            {
+              "name": "doc",
+              "path": "/nix/store/8w3c7a58rzcdc09zc48fscv0in5gb4jj-rustc-wrapper-1.90.0-doc"
+            }
+          ],
+          "store_path": "/nix/store/pw6j8mfpz3j9jf5vmxcn5q2b55s6ifri-rustc-wrapper-1.90.0"
+        }
+      }
+    }
+  }
+}

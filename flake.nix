@@ -1,5 +1,5 @@
 {
-  description = "Desktop shell for Caelestia dots";
+  description = "Desktop shell for Celestia dots";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
@@ -12,7 +12,7 @@
     caelestia-cli = {
       url = "github:caelestia-dots/cli";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.caelestia-shell.follows = "";
+      inputs.celestia-shell.follows = "";
     };
   };
 
@@ -29,7 +29,7 @@
     formatter = forAllSystems (pkgs: pkgs.alejandra);
 
     packages = forAllSystems (pkgs: rec {
-      caelestia-shell = pkgs.callPackage ./nix {
+      celestia-shell = pkgs.callPackage ./nix {
         rev = self.rev or self.dirtyRev;
         stdenv = pkgs.clangStdenv;
         quickshell = inputs.quickshell.packages.${pkgs.system}.default.override {
@@ -39,14 +39,14 @@
         app2unit = pkgs.callPackage ./nix/app2unit.nix {inherit pkgs;};
         caelestia-cli = inputs.caelestia-cli.packages.${pkgs.system}.default;
       };
-      with-cli = caelestia-shell.override {withCli = true;};
-      debug = caelestia-shell.override {debug = true;};
-      default = caelestia-shell;
+      with-cli = celestia-shell.override {withCli = true;};
+      debug = celestia-shell.override {debug = true;};
+      default = celestia-shell;
     });
 
     devShells = forAllSystems (pkgs: {
       default = let
-        shell = self.packages.${pkgs.system}.caelestia-shell;
+        shell = self.packages.${pkgs.system}.celestia-shell;
       in
         pkgs.mkShell.override {stdenv = shell.stdenv;} {
           inputsFrom = [shell shell.plugin shell.extras];

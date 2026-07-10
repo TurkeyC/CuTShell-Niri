@@ -1,5 +1,5 @@
-# Python dependencies for niri-caelestia-shell color generation
-# Install into the caelestia venv via: uv pip install -r requirements.txt
+# Python dependencies for Celestia-Shell color generation
+# Install into the Celestia venv via: uv pip install -r requirements.txt
 
 build==1.2.2.post1
     # via -r sdata/uv/requirements.in

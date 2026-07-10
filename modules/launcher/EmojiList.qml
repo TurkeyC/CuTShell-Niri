@@ -5,7 +5,7 @@ import qs.components.controls
 import qs.services
 import qs.config
 import qs.utils
-import Caelestia
+import Celestia
 import Quickshell
 import Quickshell.Io as Io
 import QtQuick

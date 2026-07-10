@@ -3,7 +3,7 @@ import qs.components.effects
 import qs.components.images
 import qs.services
 import qs.config
-import Caelestia.Models
+import Celestia.Models
 import Quickshell
 import Quickshell.Widgets
 import QtQuick

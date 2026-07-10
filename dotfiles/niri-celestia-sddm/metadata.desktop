@@ -1,0 +1,12 @@
+[SddmGreeterTheme]
+Name=niri-celestia-sddm
+Description=SDDM theme matching Celestia-Shell lockscreen (Material You / Quickshell)
+Author=niri-celestia-sddm contributors
+Website=https://github.com/AyushKr2003/Celestia-Shell
+Version=1.0
+License=GPL-3.0
+Type=sddm-theme
+MainScript=Main.qml
+ConfigFile=theme.conf
+Screenshot=Previews/preview.png
+QtVersion=6

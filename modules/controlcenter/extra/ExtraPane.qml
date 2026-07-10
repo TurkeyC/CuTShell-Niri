@@ -8,7 +8,7 @@ import qs.components.effects
 import qs.components.containers
 import qs.services
 import qs.config
-import Caelestia
+import Celestia
 import Quickshell
 import Quickshell.Widgets
 import QtQuick

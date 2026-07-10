@@ -5,7 +5,7 @@ import qs.components
 import qs.components.controls
 import qs.config
 import qs.services
-import Caelestia
+import Celestia
 import QtQuick
 import QtQuick.Layouts
 

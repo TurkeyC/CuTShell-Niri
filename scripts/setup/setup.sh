@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# setup.sh — Setup script for niri-caelestia-shell (Arch Linux)
+# setup.sh — Setup script for Celestia-Shell (Arch Linux)
 #
 # This script installs all system packages, creates the Python virtual environment,
 # installs Python dependencies, and sets up directories and services needed by
@@ -156,7 +156,7 @@ setup_python_venv() {
     mkdir -p "$VENV_DIR"
 
     # Create venv with Python 3.12 (required for Pillow compatibility)
-    uv venv --prompt caelestia "$VENV_DIR" -p 3.12
+    uv venv --prompt celestia "$VENV_DIR" -p 3.12
 
     # Install Python packages
     source "$VENV_DIR/bin/activate"
@@ -182,23 +182,23 @@ setup_directories() {
 
 # ─── 4. Environment Variable ─────────────────────────────────────────────────
 setup_env_var() {
-    info "Setting up CAELESTIA_VIRTUAL_ENV environment variable..."
+    info "Setting up CELESTIA_VIRTUAL_ENV environment variable..."
 
-    local env_line="export CAELESTIA_VIRTUAL_ENV=\"$VENV_DIR\""
+    local env_line="export CELESTIA_VIRTUAL_ENV=\"$VENV_DIR\""
     local env_set=false
 
     # Fish shell
-    local fish_conf="$XDG_CONFIG_HOME/fish/conf.d/caelestia.fish"
+    local fish_conf="$XDG_CONFIG_HOME/fish/conf.d/celestia.fish"
     mkdir -p "$(dirname "$fish_conf")"
-    echo "set -gx CAELESTIA_VIRTUAL_ENV \"$VENV_DIR\"" > "$fish_conf"
+    echo "set -gx CELESTIA_VIRTUAL_ENV \"$VENV_DIR\"" > "$fish_conf"
     ok "Fish: $fish_conf"
 
     # Bash
     for rc in "$HOME/.bashrc" "$HOME/.bash_profile"; do
         if [[ -f "$rc" ]]; then
-            if ! grep -q 'CAELESTIA_VIRTUAL_ENV' "$rc"; then
+            if ! grep -q 'CELESTIA_VIRTUAL_ENV' "$rc"; then
                 echo "" >> "$rc"
-                echo "# niri-caelestia-shell Python venv" >> "$rc"
+                echo "# Celestia-Shell Python venv" >> "$rc"
                 echo "$env_line" >> "$rc"
                 ok "Added to $rc"
                 env_set=true
@@ -211,9 +211,9 @@ setup_env_var() {
 
     # Zsh
     if [[ -f "$HOME/.zshrc" ]]; then
-        if ! grep -q 'CAELESTIA_VIRTUAL_ENV' "$HOME/.zshrc"; then
+        if ! grep -q 'CELESTIA_VIRTUAL_ENV' "$HOME/.zshrc"; then
             echo "" >> "$HOME/.zshrc"
-            echo "# niri-caelestia-shell Python venv" >> "$HOME/.zshrc"
+            echo "# Celestia-Shell Python venv" >> "$HOME/.zshrc"
             echo "$env_line" >> "$HOME/.zshrc"
             ok "Added to ~/.zshrc"
         else
@@ -222,13 +222,13 @@ setup_env_var() {
     fi
 
     # Also export for current session
-    export CAELESTIA_VIRTUAL_ENV="$VENV_DIR"
+    export CELESTIA_VIRTUAL_ENV="$VENV_DIR"
 
     # Environment.d for systemd user sessions (picked up by graphical session)
     local envd_dir="$XDG_CONFIG_HOME/environment.d"
     mkdir -p "$envd_dir"
-    echo "CAELESTIA_VIRTUAL_ENV=$VENV_DIR" > "$envd_dir/caelestia.conf"
-    ok "Systemd: $envd_dir/caelestia.conf"
+    echo "CELESTIA_VIRTUAL_ENV=$VENV_DIR" > "$envd_dir/celestia.conf"
+    ok "Systemd: $envd_dir/celestia.conf"
 }
 
 # ─── 5. Services ─────────────────────────────────────────────────────────────
@@ -271,7 +271,7 @@ setup_services() {
 # ─── Main ─────────────────────────────────────────────────────────────────────
 main() {
     printf "\n${BOLD}${CYAN}╔══════════════════════════════════════════╗${RST}\n"
-    printf "${BOLD}${CYAN}║   niri-caelestia-shell  —  Arch Setup    ║${RST}\n"
+    printf "${BOLD}${CYAN}║   Celestia-Shell  —  Arch Setup    ║${RST}\n"
     printf "${BOLD}${CYAN}╚══════════════════════════════════════════╝${RST}\n\n"
 
     info "Shell directory: $SHELL_DIR"
@@ -318,7 +318,7 @@ main() {
 
     info "You may need to log out and back in for:"
     info "  - Group changes (i2c, input, video) to take effect"
-    info "  - CAELESTIA_VIRTUAL_ENV to be available in your session"
+    info "  - CELESTIA_VIRTUAL_ENV to be available in your session"
     echo ""
     info "To manually test color generation:"
     info "  bash $SHELL_DIR/scripts/colors/switchwall.sh --mode dark <wallpaper_path>"

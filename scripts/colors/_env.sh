@@ -1,9 +1,9 @@
-# _env.sh — Shared constants and utilities for niri-caelestia-shell color scripts
+# _env.sh — Shared constants and utilities for Celestia-Shell color scripts
 #
 # Source this file at the top of every color script in this directory:
 #   source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/_env.sh"
 
-QUICKSHELL_CONFIG_NAME="caelestia"
+QUICKSHELL_CONFIG_NAME="Celestia-Shell"
 : "${XDG_CONFIG_HOME:=$HOME/.config}"
 : "${XDG_CACHE_HOME:=$HOME/.cache}"
 : "${XDG_STATE_HOME:=$HOME/.local/state}"
@@ -17,7 +17,7 @@ GENERATED_DIR="$STATE_DIR/generated"
 SCSS_FILE="$GENERATED_DIR/material_colors.scss"
 
 # Python virtual environment for materialyoucolor and friends
-PYTHON_VENV="${CAELESTIA_VIRTUAL_ENV:-$XDG_STATE_HOME/quickshell/.venv}"
+PYTHON_VENV="${CELESTIA_VIRTUAL_ENV:-$XDG_STATE_HOME/quickshell/.venv}"
 
 mkdir -p "$GENERATED_DIR"
 

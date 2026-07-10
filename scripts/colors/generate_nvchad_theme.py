@@ -4,7 +4,7 @@ generate_nvchad_theme.py
 ────────────────────────────────────────────────────────────────────────────────
 Reads Material You colors from matugen's generated colors.json and writes:
 
-  ~/.config/nvim/lua/themes/niri-caelestia.lua
+  ~/.config/nvim/lua/themes/niri-celestia.lua
   ~/.config/nvim/lua/chadrc.lua  (patched to activate the theme)
 
 Then reloads running Neovim instances via --server remote-send.
@@ -46,7 +46,7 @@ from pathlib import Path
 # CRITICAL: THEME_NAME must exactly match the filename (without .lua)
 # base46 resolves: require("themes." .. name) → lua/themes/<name>.lua
 
-THEME_NAME          = "niri-caelestia"
+THEME_NAME          = "niri-celestia"
 DEFAULT_COLORS_JSON = Path.home() / ".local/state/quickshell/user/generated/colors.json"
 NVIM_CONFIG_DIR     = Path.home() / ".config/nvim"
 NVIM_THEME_DIR      = NVIM_CONFIG_DIR / "lua" / "themes"

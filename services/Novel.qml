@@ -4,7 +4,7 @@ import Quickshell
 import Quickshell.Io
 import qs.config
 import qs.utils
-import Caelestia
+import Celestia
 
 Singleton {
     id: root

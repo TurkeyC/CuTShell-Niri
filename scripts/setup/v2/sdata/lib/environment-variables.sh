@@ -1,4 +1,4 @@
-# Environment variables for niri-caelestia-shell installer
+# Environment variables for Celestia-Shell installer
 XDG_BIN_HOME=${XDG_BIN_HOME:-$HOME/.local/bin}
 XDG_CACHE_HOME=${XDG_CACHE_HOME:-$HOME/.cache}
 XDG_CONFIG_HOME=${XDG_CONFIG_HOME:-$HOME/.config}
@@ -15,5 +15,5 @@ STY_BOLD='\e[1m'
 STY_RST='\e[00m'
 
 # Requested backup location
-BACKUP_DIR="$HOME/niri-caelestia-shell.backup"
+BACKUP_DIR="$HOME/Celestia-Shell.backup"
 VENV_DIR="${XDG_STATE_HOME}/quickshell/.venv"

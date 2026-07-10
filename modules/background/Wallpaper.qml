@@ -6,7 +6,7 @@ import qs.components.filedialog
 import qs.services
 import qs.config
 import qs.utils
-import Caelestia
+import Celestia
 import QtQuick
 import QtMultimedia
 

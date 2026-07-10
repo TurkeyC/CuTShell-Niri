@@ -1,4 +1,4 @@
-# Arch Linux dependency installer for niri-caelestia-shell
+# Arch Linux dependency installer for Celestia-Shell
 if ! command -v pacman &>/dev/null; then
   echo -e "${STY_RED}Pacman not found. Aborting...${STY_RST}"; exit 1
 fi

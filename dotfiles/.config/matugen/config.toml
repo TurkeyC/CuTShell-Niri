@@ -27,8 +27,8 @@ output_path='~/.config/niri/colors.kdl'
 
 [templates.mpv]
 input_path = '~/.config/matugen/templates/mpv/mpv.conf'
-output_path = '~/.config/mpv/script-opts/niri_caelestia.conf'
+output_path = '~/.config/mpv/script-opts/niri_celestia.conf'
 
 [templates.btop]
 input_path = '~/.config/matugen/templates/btop/btop.theme'
-output_path = '~/.config/btop/themes/niri_caelestia.theme'
+output_path = '~/.config/btop/themes/niri_celestia.theme'

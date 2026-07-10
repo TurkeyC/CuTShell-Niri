@@ -6,7 +6,7 @@ import Quickshell.Services.Polkit
 import QtQuick
 
 /**
- * PolkitService — native polkit authentication agent for niri-caelestia-shell.
+ * PolkitService — native polkit authentication agent for Celestia-Shell.
  *
  * Replaces the external polkit-kde-authentication-agent-1.
  * The service owns the PolkitAgent registration and exposes cleaned-up

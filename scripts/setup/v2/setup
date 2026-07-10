@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# niri-caelestia-shell v2 Modular Installer
+# Celestia-Shell v2 Modular Installer
 # Inspired by dots-hyprland/setup
 
 cd "$(dirname "$0")"
@@ -35,7 +35,7 @@ prevent_sudo_or_root
 set -e
 
 showhelp_global(){
-printf "${STY_CYAN}niri-caelestia-shell Modular Setup (v2)${STY_RST}
+printf "${STY_CYAN}Celestia-Shell Modular Setup (v2)${STY_RST}
 
 Syntax:
   $0 <subcommand> [OPTIONS]...
@@ -46,7 +46,7 @@ Subcommands:
   install-setups Stage 2: Configure permissions, services, and groups.
   install-files  Stage 3: Copy configuration files and assets.
   install-sddm   Stage 4: Setup SDDM login theme.
-  uninstall      Uninstall niri-caelestia-shell.
+  uninstall      Uninstall Celestia-Shell.
   help           Show this help message.
 
 For each subcommand, use -h for details:

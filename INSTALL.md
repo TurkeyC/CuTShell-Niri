@@ -83,7 +83,7 @@ cmake --build build -j$(nproc)
 
 ### 3. 安装
 
-**注意**：Fedora 的 Qt6 QML 路径是 `/usr/lib64/qt6/qml/`，不是 `/usr/lib/qt6/qml/`。安装时必须指定正确的路径，否则 QML 引擎找不到新编译的插件（会加载 Fedora 包自带的旧版 Caelestia 模块，缺少 `CachingImageManager` 等类型）。
+**注意**：Fedora 的 Qt6 QML 路径是 `/usr/lib64/qt6/qml/`，不是 `/usr/lib/qt6/qml/`。安装时必须指定正确的路径，否则 QML 引擎找不到新编译的插件（会加载 Fedora 包自带的旧版 Celestia 模块，缺少 `CachingImageManager` 等类型）。
 
 ```bash
 cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DINSTALL_QMLDIR="usr/lib64/qt6/qml"
@@ -94,16 +94,16 @@ sudo cmake --install build --prefix /
 
 | 路径 | 内容 |
 |------|------|
-| `/usr/lib64/qt6/qml/Caelestia/` | C++ 插件（.so + qmldir + qmltypes） |
-| `/usr/lib/caelestia/version` | 版本二进制 |
-| `/etc/xdg/quickshell/caelestia/` | Shell 配置（QML 组件、模块、服务等） |
+| `/usr/lib64/qt6/qml/Celestia/` | C++ 插件（.so + qmldir + qmltypes） |
+| `/usr/lib/Celestia/Shell/version` | 版本二进制 |
+| `/etc/xdg/quickshell/Celestia/Shell/` | Shell 配置（QML 组件、模块、服务等） |
 
 ## 启动
 
-caelestia 以 quickshell 配置的方式运行：
+Celestia 以 quickshell 配置的方式运行：
 
 ```bash
-quickshell --config caelestia
+quickshell --config Celestia
 ```
 
 ## 常见问题
@@ -112,12 +112,12 @@ quickshell --config caelestia
 
 **症状**：CMake 配置时报错找不到 `cava` / `libcava`。
 
-**原因**：caelestia 的 `CavaProvider` 需要 cava 的开发库（`libcava` + `<cava/cavacore.h>`），但 Fedora 的 `cava` 包只提供了 `/usr/bin/cava` 二进制，**没有**打包 `-devel` 子包。
+**原因**：Celestia 的 `CavaProvider` 需要 cava 的开发库（`libcava` + `<cava/cavacore.h>`），但 Fedora 的 `cava` 包只提供了 `/usr/bin/cava` 二进制，**没有**打包 `-devel` 子包。
 
 **解决方案**：从构建中剔除 cava 模块。修改以下文件后重新编译：
 
-- `plugin/src/Caelestia/CMakeLists.txt` — 删除 `pkg_check_modules(Cava ...)` 三行
-- `plugin/src/Caelestia/Services/CMakeLists.txt` — 从 `SOURCES` 移除 `cavaprovider.cpp/hpp`，从 `LIBRARIES` 移除 `PkgConfig::Cava`
+- `plugin/src/Celestia/CMakeLists.txt` — 删除 `pkg_check_modules(Cava ...)` 三行
+- `plugin/src/Celestia/Services/CMakeLists.txt` — 从 `SOURCES` 移除 `cavaprovider.cpp/hpp`，从 `LIBRARIES` 移除 `PkgConfig::Cava`
 - `services/Cava.qml` — 替换为空桩
 
 **后果**：音频可视化（Cava 频谱条）功能不可用。
@@ -143,7 +143,7 @@ CachingImageManager is not a type
 ```
 错误链：`Background` → `Wallpaper` → `FileDialog` → `FolderContents` → `CachingIconImage` → `CachingImage` → `CachingImageManager`
 
-**原因**：Fedora 的 Qt6 QML 路径是 `/usr/lib64/qt6/qml/`，但项目默认安装到 `/usr/lib/qt6/qml/`。QML 引擎使用前者，加载了 Fedora 自带的老版本 Caelestia 模块（不含 `CachingImageManager`）。
+**原因**：Fedora 的 Qt6 QML 路径是 `/usr/lib64/qt6/qml/`，但项目默认安装到 `/usr/lib/qt6/qml/`。QML 引擎使用前者，加载了 Fedora 自带的老版本 Celestia 模块（不含 `CachingImageManager`）。
 
 **解决方案**：
 
@@ -155,17 +155,17 @@ CachingImageManager is not a type
 
 2. 如果已有文件安装到两个路径，需要同步修改两个位置的 `qmldir`，去掉 `optional` 关键字（否则 QML 引擎静默跳过插件加载）：
    ```bash
-   sudo sed -i 's/optional plugin caelestia-internalplugin/plugin caelestia-internalplugin/' \
-     /usr/lib64/qt6/qml/Caelestia/Internal/qmldir
-   sudo sed -i 's/optional plugin caelestia-internalplugin/plugin caelestia-internalplugin/' \
-     /usr/lib/qt6/qml/Caelestia/Internal/qmldir
+   sudo sed -i 's/optional plugin Celestia-internalplugin/plugin Celestia-internalplugin/' \
+     /usr/lib64/qt6/qml/Celestia/Internal/qmldir
+   sudo sed -i 's/optional plugin Celestia-internalplugin/plugin Celestia-internalplugin/' \
+     /usr/lib/qt6/qml/Celestia/Internal/qmldir
    ```
 
 ### 3. 图标不显示——Material Symbols 字体缺失
 
-**症状**：caelestia 界面中所有图标显示为文本或紫黑色方块，包括音量、Wi-Fi、蓝牙、电池等状态图标。
+**症状**：Celestia 界面中所有图标显示为文本或紫黑色方块，包括音量、Wi-Fi、蓝牙、电池等状态图标。
 
-**原因**：caelestia 的 `MaterialIcon` 组件使用 `"Material Symbols Rounded"` 字体渲染图标，该字体未安装。
+**原因**：Celestia 的 `MaterialIcon` 组件使用 `"Material Symbols Rounded"` 字体渲染图标，该字体未安装。
 
 **解决方案**：
 ```bash
@@ -232,7 +232,7 @@ if (!occupied[ws + 1] && count > 0)
 sudo dnf install matugen
 ```
 
-**方案 B**：手动指定预定义主题，修改 `~/.local/state/caelestia/scheme.json`：
+**方案 B**：手动指定预定义主题，修改 `~/.local/state/Celestia/Shell/scheme.json`：
 ```json
 {
   "name": "catppuccin",
@@ -247,10 +247,10 @@ sudo dnf install matugen
 
 **需求**：系统休眠被禁用，希望把 session 面板的休眠按钮改成锁屏。
 
-**解决方案**：修改 `~/.config/niri_caelestia/shell.json`，将 `hibernate` 命令改为调用 quickshell IPC 触发 caelestia 自带的锁屏（基于 `WlSessionLock`）：
+**解决方案**：修改 `~/.config/niri_Celestia/shell.json`，将 `hibernate` 命令改为调用 quickshell IPC 触发 Celestia 自带的锁屏（基于 `WlSessionLock`）：
 
 ```json
-"hibernate": ["qs", "-c", "caelestia", "ipc", "call", "lock", "lock"]
+"hibernate": ["qs", "-c", "Celestia", "ipc", "call", "lock", "lock"]
 ```
 
 或者使用 systemd-logind：
@@ -266,6 +266,6 @@ sudo dnf install matugen
 [ServiceManga] Server exited with code 127
 ```
 
-**原因**：小说和漫画阅读器的后端服务器程序未安装（在 `extras/` 目录下，需要额外构建），不影响 caelestia 核心功能。
+**原因**：小说和漫画阅读器的后端服务器程序未安装（在 `extras/` 目录下，需要额外构建），不影响 Celestia 核心功能。
 
 **解决方案**：如果不使用小说/漫画功能，可以忽略。如需使用，需构建并安装 `extras/` 下的对应服务端。

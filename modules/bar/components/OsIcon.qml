@@ -22,11 +22,11 @@ Item {
 
     Loader {
         anchors.centerIn: parent
-        sourceComponent: Config.general.isDistLogo ? distroIcon : caelestiaLogo
+        sourceComponent: Config.general.isDistLogo ? distroIcon : celestiaLogo
     }
 
     Component {
-        id: caelestiaLogo
+        id: celestiaLogo
 
         Logo {
             implicitWidth: Math.round(Appearance.font.size.large * 1.6)

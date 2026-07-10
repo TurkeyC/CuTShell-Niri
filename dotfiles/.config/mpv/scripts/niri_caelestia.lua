@@ -1,4 +1,4 @@
--- Niri-Caelestia (https://github.com/Samillion/Niri-Caelestia)
+-- Niri-Celestia (https://github.com/Samillion/Niri-Celestia)
 --
 -- This script is a derivative of the original mpv-osc-modern by maoiscat
 -- and subsequent forks:
@@ -16,10 +16,10 @@ local utils = require "mp.utils"
 
 -- Parameters
 -- default user option values
--- do not touch, change them in niri_caelestia.conf
+-- do not touch, change them in niri_celestia.conf
 local user_opts = {
     -- Language and display
-    language = "en",                       -- set language (for available options, see: https://github.com/Samillion/Niri-Caelestia/blob/main/docs/TRANSLATIONS.md)
+    language = "en",                       -- set language (for available options, see: https://github.com/Samillion/Niri-Celestia/blob/main/docs/TRANSLATIONS.md)
     icon_theme = "fluent",                 -- set icon theme. accepts "fluent" or "material"
     font = "mpv-osd-symbols",              -- font for the OSC (default: mpv-osd-symbols or the one set in mpv.conf)
 
@@ -241,7 +241,7 @@ local user_opts = {
     tick_delay = 0.03,                     -- minimum interval between OSC redraws (in seconds)
     tick_delay_follow_display_fps = false, -- use display FPS as the minimum redraw interval
 
-    live_reload = true,                    -- watch niri_caelestia.conf for changes and reload automatically
+    live_reload = true,                    -- watch niri_celestia.conf for changes and reload automatically
     live_reload_interval = 1.0,            -- polling interval for live reload (in seconds)
 
     -- Elements Position
@@ -266,27 +266,27 @@ local user_opts = {
     -- title above seekbar mouse actions
     title_mbtn_left_command = "script-binding stats/display-page-5",
     title_mbtn_mid_command = "show-text ${path}",
-    title_mbtn_right_command = "script-binding select/select-watch-history; script-message-to niri_caelestia osc-hide",
+    title_mbtn_right_command = "script-binding select/select-watch-history; script-message-to niri_celestia osc-hide",
 
     -- playlist button mouse actions
-    playlist_mbtn_left_command = "script-message-to niri_caelestia menu-toggle playlist; script-message-to niri_caelestia osc-hide",
-    playlist_mbtn_right_command = "script-message-to niri_caelestia menu-toggle playlist; script-message-to niri_caelestia osc-hide",
+    playlist_mbtn_left_command = "script-message-to niri_celestia menu-toggle playlist; script-message-to niri_celestia osc-hide",
+    playlist_mbtn_right_command = "script-message-to niri_celestia menu-toggle playlist; script-message-to niri_celestia osc-hide",
 
     -- volume mouse actions
     vol_ctrl_mbtn_left_command = "no-osd cycle mute",
-    vol_ctrl_mbtn_right_command = "script-binding select/select-audio-device; script-message-to niri_caelestia osc-hide",
+    vol_ctrl_mbtn_right_command = "script-binding select/select-audio-device; script-message-to niri_celestia osc-hide",
     vol_ctrl_wheel_down_command = "no-osd add volume -5",
     vol_ctrl_wheel_up_command = "no-osd add volume 5",
 
     -- audio button mouse actions
-    audio_track_mbtn_left_command = "script-message-to niri_caelestia menu-toggle audio; script-message-to niri_caelestia osc-hide",
+    audio_track_mbtn_left_command = "script-message-to niri_celestia menu-toggle audio; script-message-to niri_celestia osc-hide",
     audio_track_mbtn_mid_command = "cycle audio down",
     audio_track_mbtn_right_command = "cycle audio",
     audio_track_wheel_down_command = "cycle audio",
     audio_track_wheel_up_command = "cycle audio down",
 
     -- subtitle button mouse actions
-    sub_track_mbtn_left_command = "script-message-to niri_caelestia menu-toggle sub; script-message-to niri_caelestia osc-hide",
+    sub_track_mbtn_left_command = "script-message-to niri_celestia menu-toggle sub; script-message-to niri_celestia osc-hide",
     sub_track_mbtn_mid_command = "cycle sub down",
     sub_track_mbtn_right_command = "cycle sub",
     sub_track_wheel_down_command = "cycle sub",
@@ -295,24 +295,24 @@ local user_opts = {
     -- chapter skip buttons mouse actions
     chapter_prev_mbtn_left_command = "add chapter -1",
     chapter_prev_mbtn_mid_command = "show-text ${chapter-list} 3000",
-    chapter_prev_mbtn_right_command = "script-message-to niri_caelestia menu-toggle chapters; script-message-to niri_caelestia osc-hide",
+    chapter_prev_mbtn_right_command = "script-message-to niri_celestia menu-toggle chapters; script-message-to niri_celestia osc-hide",
 
     chapter_next_mbtn_left_command = "add chapter 1",
     chapter_next_mbtn_mid_command = "show-text ${chapter-list} 3000",
-    chapter_next_mbtn_right_command = "script-message-to niri_caelestia menu-toggle chapters; script-message-to niri_caelestia osc-hide",
+    chapter_next_mbtn_right_command = "script-message-to niri_celestia menu-toggle chapters; script-message-to niri_celestia osc-hide",
 
     -- chapter title (below seekbar) mouse actions
-    chapter_title_mbtn_left_command = "script-message-to niri_caelestia menu-toggle chapters; script-message-to niri_caelestia osc-hide",
+    chapter_title_mbtn_left_command = "script-message-to niri_celestia menu-toggle chapters; script-message-to niri_celestia osc-hide",
     chapter_title_mbtn_right_command = "show-text ${chapter-list} 3000",
 
     -- playlist skip buttons mouse actions
     playlist_prev_mbtn_left_command = "playlist-prev",
     playlist_prev_mbtn_mid_command = "show-text ${playlist} 3000",
-    playlist_prev_mbtn_right_command = "script-message-to niri_caelestia menu-toggle playlist; script-message-to niri_caelestia osc-hide",
+    playlist_prev_mbtn_right_command = "script-message-to niri_celestia menu-toggle playlist; script-message-to niri_celestia osc-hide",
 
     playlist_next_mbtn_left_command = "playlist-next",
     playlist_next_mbtn_mid_command = "show-text ${playlist} 3000",
-    playlist_next_mbtn_right_command = "script-message-to niri_caelestia menu-toggle playlist; script-message-to niri_caelestia osc-hide",
+    playlist_next_mbtn_right_command = "script-message-to niri_celestia menu-toggle playlist; script-message-to niri_celestia osc-hide",
 
     -- fullscreen button mouse actions
     fullscreen_mbtn_left_command = "cycle fullscreen",
@@ -487,7 +487,7 @@ function get_locale_from_json(path)
 end
 
 -- load external locales if available
-local locale_path = "~~/script-opts/niri_caelestia-locale.json"
+local locale_path = "~~/script-opts/niri_celestia-locale.json"
 local external = get_locale_from_json(locale_path)
 
 if external then
@@ -1804,7 +1804,7 @@ local function window_controls()
 end
 
 --
--- Niri-Caelestia Layout
+-- Niri-Celestia Layout
 --
 
 local layouts = {}
@@ -2474,12 +2474,12 @@ local function menu_open(kind)
         end
     end
     menu_key_bindings = {}
-    menu_add_binding("up", "niri_caelestia-menu-up", function() menu_navigate(-1) end, "repeatable")
-    menu_add_binding("down", "niri_caelestia-menu-down", function() menu_navigate(1) end, "repeatable")
-    menu_add_binding("enter", "niri_caelestia-menu-enter", menu_confirm)
-    menu_add_binding("esc", "niri_caelestia-menu-esc", menu_close)
-    mp.add_forced_key_binding("mbtn_left", "niri_caelestia-menu-click", menu_handle_click)
-    menu_key_bindings[#menu_key_bindings + 1] = "niri_caelestia-menu-click"
+    menu_add_binding("up", "niri_celestia-menu-up", function() menu_navigate(-1) end, "repeatable")
+    menu_add_binding("down", "niri_celestia-menu-down", function() menu_navigate(1) end, "repeatable")
+    menu_add_binding("enter", "niri_celestia-menu-enter", menu_confirm)
+    menu_add_binding("esc", "niri_celestia-menu-esc", menu_close)
+    mp.add_forced_key_binding("mbtn_left", "niri_celestia-menu-click", menu_handle_click)
+    menu_key_bindings[#menu_key_bindings + 1] = "niri_celestia-menu-click"
     request_tick()
 end
 
@@ -4234,12 +4234,12 @@ mp.register_script_message("menu-toggle", menu_toggle)
 mp.register_script_message("menu-close", menu_close)
 
 
--- Live-reload niri_caelestia.conf
+-- Live-reload niri_celestia.conf
 -- Reloads all user options and refreshes OSC styles/layout without restarting mpv.
 -- Trigger manually via:
---   script-message niri_caelestia-reload
---   script-binding niri_caelestia-reload   (bind a key in input.conf)
--- Or automatically when niri_caelestia.conf is saved (file-watcher polls every 1 s default).
+--   script-message niri_celestia-reload
+--   script-binding niri_celestia-reload   (bind a key in input.conf)
+-- Or automatically when niri_celestia.conf is saved (file-watcher polls every 1 s default).
 
 
 -- validate string type user options
@@ -4372,8 +4372,8 @@ local live_reload_timer = nil
 local reload_in_progress = false
 local reload_user_opts
 
-local function get_niri_caelestia_conf_mtime()
-    local path = mp.find_config_file("script-opts/niri_caelestia.conf")
+local function get_niri_celestia_conf_mtime()
+    local path = mp.find_config_file("script-opts/niri_celestia.conf")
     if not path then
         return nil
     end
@@ -4384,23 +4384,23 @@ local function get_niri_caelestia_conf_mtime()
     return info.mtime
 end
 
-local function poll_niri_caelestia_conf()
+local function poll_niri_celestia_conf()
     if not user_opts.live_reload then
         return
     end
-    local mtime = get_niri_caelestia_conf_mtime()
+    local mtime = get_niri_celestia_conf_mtime()
     if not mtime then
         config_mtime = nil
         return
     end
     if not config_mtime then
         config_mtime = mtime
-        reload_user_opts("niri_caelestia.conf created")
+        reload_user_opts("niri_celestia.conf created")
         return
     end
     if mtime ~= config_mtime then
         config_mtime = mtime
-        reload_user_opts("niri_caelestia.conf changed")
+        reload_user_opts("niri_celestia.conf changed")
     end
 end
 
@@ -4416,8 +4416,8 @@ local function start_live_reload()
     if interval <= 0 then
         interval = 1
     end
-    live_reload_timer = mp.add_periodic_timer(interval, poll_niri_caelestia_conf)
-    config_mtime = get_niri_caelestia_conf_mtime() or config_mtime
+    live_reload_timer = mp.add_periodic_timer(interval, poll_niri_celestia_conf)
+    config_mtime = get_niri_celestia_conf_mtime() or config_mtime
 end
 
 local function apply_user_opts(changed, force)
@@ -4445,24 +4445,24 @@ reload_user_opts = function(reason)
         return
     end
     reload_in_progress = true
-    opt.read_options(user_opts, "niri_caelestia")
+    opt.read_options(user_opts, "niri_celestia")
     apply_user_opts(nil, true)
     reload_in_progress = false
     if reason then
-        msg.info("Niri-Caelestia config reloaded (" .. reason .. ")")
-        --mp.osd_message("Niri-Caelestia config reloaded", 2)
+        msg.info("Niri-Celestia config reloaded (" .. reason .. ")")
+        --mp.osd_message("Niri-Celestia config reloaded", 2)
     end
 end
 
-mp.register_script_message("niri_caelestia-reload", function()
+mp.register_script_message("niri_celestia-reload", function()
     reload_user_opts("script-message")
 end)
-mp.add_key_binding(nil, "niri_caelestia-reload", function()
+mp.add_key_binding(nil, "niri_celestia-reload", function()
     reload_user_opts("script-binding")
 end)
 
 -- read options from config and command-line
-opt.read_options(user_opts, "niri_caelestia", function(changed)
+opt.read_options(user_opts, "niri_celestia", function(changed)
     apply_user_opts(changed, false)
 end)
 

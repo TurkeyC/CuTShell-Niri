@@ -1,4 +1,4 @@
-# System setup for niri-caelestia-shell
+# System setup for Celestia-Shell
 echo -e "${STY_CYAN}Configuring system settings and directories...${STY_RST}"
 
 # 1. Precise Directory Structure
@@ -16,31 +16,31 @@ v install-python-packages
 # 3. Environment Variable Deployment
 echo -e "${STY_BLUE}Configuring environment variables across shells...${STY_RST}"
 VENV_PATH="${XDG_STATE_HOME}/quickshell/.venv"
-ENV_LINE="export CAELESTIA_VIRTUAL_ENV=\"$VENV_PATH\""
+ENV_LINE="export CELESTIA_VIRTUAL_ENV=\"$VENV_PATH\""
 
 # Bash configuration
 if [[ -f "$HOME/.bashrc" ]]; then
-  if ! grep -q 'CAELESTIA_VIRTUAL_ENV' "$HOME/.bashrc"; then
-    echo -e "\n# niri-caelestia-shell Python venv\n$ENV_LINE" >> "$HOME/.bashrc"
+  if ! grep -q 'CELESTIA_VIRTUAL_ENV' "$HOME/.bashrc"; then
+    echo -e "\n# Celestia-Shell Python venv\n$ENV_LINE" >> "$HOME/.bashrc"
     echo -e "  ${STY_DIM}Updated ~/.bashrc${STY_RST}"
   fi
 fi
 
 # Zsh configuration
 if [[ -f "$HOME/.zshrc" ]]; then
-  if ! grep -q 'CAELESTIA_VIRTUAL_ENV' "$HOME/.zrc"; then
-    echo -e "\n# niri-caelestia-shell Python venv\n$ENV_LINE" >> "$HOME/.zshrc"
+  if ! grep -q 'CELESTIA_VIRTUAL_ENV' "$HOME/.zrc"; then
+    echo -e "\n# Celestia-Shell Python venv\n$ENV_LINE" >> "$HOME/.zshrc"
     echo -e "  ${STY_DIM}Updated ~/.zshrc${STY_RST}"
   fi
 fi
 
 # Fish configuration
 mkdir -p "${XDG_CONFIG_HOME}/fish/conf.d"
-echo "set -gx CAELESTIA_VIRTUAL_ENV \"$VENV_PATH\"" > "${XDG_CONFIG_HOME}/fish/conf.d/caelestia.fish"
+echo "set -gx CELESTIA_VIRTUAL_ENV \"$VENV_PATH\"" > "${XDG_CONFIG_HOME}/fish/conf.d/celestia.fish"
 echo -e "  ${STY_DIM}Updated Fish conf.d${STY_RST}"
 
 # Systemd user session environment
-echo "CAELESTIA_VIRTUAL_ENV=$VENV_PATH" > "${XDG_CONFIG_HOME}/environment.d/caelestia.conf"
+echo "CELESTIA_VIRTUAL_ENV=$VENV_PATH" > "${XDG_CONFIG_HOME}/environment.d/celestia.conf"
 echo -e "  ${STY_DIM}Updated environment.d${STY_RST}"
 
 # 4. Hardware Groups

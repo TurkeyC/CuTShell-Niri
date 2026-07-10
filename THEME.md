@@ -1,6 +1,6 @@
-# Niri Caelestia Shell — Dynamic Color Theming
+# Niri Celestia Shell — Dynamic Color Theming
 
-This guide provides a deep dive into the dynamic color generation system used in the Niri Caelestia Shell. This system implements a full **Material You (Material 3)** pipeline, ensuring that your entire desktop—from window borders to terminal escape sequences—stays in perfect sync with your wallpaper.
+This guide provides a deep dive into the dynamic color generation system used in the Niri Celestia Shell. This system implements a full **Material You (Material 3)** pipeline, ensuring that your entire desktop—from window borders to terminal escape sequences—stays in perfect sync with your wallpaper.
 
 ---
 
@@ -39,7 +39,7 @@ Colors are injected into `~/.config/gtk-3.0/gtk.css` and `~/.config/gtk-4.0/gtk.
 The focus ring and layout accents are updated via `~/.config/niri/colors.kdl`. This file is an included part of the main Niri config and is updated every time the wallpaper changes.
 
 ### Login Screen (SDDM)
-The `niri-caelestia-sddm` theme is integrated directly into the pipeline.
+The `niri-celestia-sddm` theme is integrated directly into the pipeline.
 *   **Shell Integrate Mode**: In its default configuration, the SDDM theme reads the shell's current state from `~/.local/state/quickshell/user/generated/colors.json`, ensuring your login screen matches your desktop perfectly.
 
 ---
@@ -60,7 +60,7 @@ The main configuration file is located at `~/.config/matugen/config.toml`. It de
 ```toml
 [templates.mpv]
 input_path = '~/.config/matugen/templates/mpv/mpv.conf'
-output_path = '~/.config/mpv/script-opts/niri_caelestia.conf'
+output_path = '~/.config/mpv/script-opts/niri_celestia.conf'
 ```
 
 ---
@@ -75,10 +75,10 @@ You can force a theme update or use specific modes from your terminal:
 
 ```bash
 # Update everything based on an image
-bash ~/.config/quickshell/niri-caelestia-shell/scripts/colors/switchwall.sh /path/to/image.jpg
+bash ~/.config/quickshell/niri-Celestia-shell/scripts/colors/switchwall.sh /path/to/image.jpg
 
 # Use Light Mode
-bash ~/.config/quickshell/niri-caelestia-shell/scripts/colors/switchwall.sh --mode light /path/to/image.jpg
+bash ~/.config/quickshell/niri-Celestia-shell/scripts/colors/switchwall.sh --mode light /path/to/image.jpg
 
 # Generate Vibrant scheme variants
 matugen image --type scheme-vibrant /path/to/image.jpg

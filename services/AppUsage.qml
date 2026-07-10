@@ -2,9 +2,9 @@ pragma Singleton
 
 import qs.config
 import qs.utils
-import Caelestia
-import Caelestia.Internal
-import Caelestia.Services
+import Celestia
+import Celestia.Internal
+import Celestia.Services
 import Quickshell
 import QtQuick
 

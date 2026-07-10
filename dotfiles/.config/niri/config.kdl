@@ -12,6 +12,6 @@ include "niri/animations.kdl"
 include "niri/gestures.kdl"
 include "niri/rules.kdl"
 include "niri/binds.kdl"
-include "niri/caelestia.kdl"
+include "niri/celestia.kdl"
 
 include "colors.kdl"
